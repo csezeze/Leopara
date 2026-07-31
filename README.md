@@ -1,119 +1,85 @@
-# Akıllı CV – İş İlanı Eşleştirme / CareerMatch AI
+# Akıllı CV – İş İlanı Eşleştirme (CareerMatch AI)
 
-## Takım İsmi
+CareerMatch AI, adayın CV'sindeki beceri ve kanıtları iş veya staj ilanının gereksinimleriyle karşılaştıran, anlaşılır bir başvuru hazırlık desteği MVP'sidir. Amaç yalnızca bir yüzde üretmek değil; adayın hangi becerilerinin örtüştüğünü, neleri geliştirebileceğini ve CV'sini etik biçimde nasıl güçlendirebileceğini görünür kılmaktır.
 
-Takım 5
+## Takım
 
-## Takım Rolleri
+| Üye | Rol | Sorumluluk |
+| --- | --- | --- |
+| Yusuf Şengöz | Product Owner | Ürün vizyonu, backlog, demo ve final teslim paketi |
+| Zeynep Özkan | Scrum Master | Sprint takibi, board, dokümantasyon ve süreç yönetimi |
+| Ceren Aydın | Backend & AI/NLP | FastAPI, eşleştirme, skor ve backend testleri |
+| Feyza Korkmaz | Frontend | React arayüzü, dosya yükleme ve sonuç ekranı |
 
-- Product Owner: Yusuf Şengöz
-- Scrum Master: Zeynep Özkan
-- Developer: Ceren Aydın
-- Developer: Feyza Korkmaz
+Detay: [takım rolleri](docs/team_roles.md)
 
-## Ürün İsmi
+## Problem ve ürün değeri
 
-Akıllı CV – İş İlanı Eşleştirme
+İş ve staj başvurularında adayların CV'leri ile ilandaki beklentiler arasındaki farkı hızlı ve somut biçimde görmekte zorlanması hedeflenir. Sistem CV ve ilan metninden tanımlı becerileri çıkarır; eşleşen ve eksik alanları karşılaştırır; ardından eşleşme ile başvuruya hazırlık skorlarını, kanıt tablosunu ve gelişim önerilerini sunar. Böylece kullanıcı başvuru öncesi kararını daha şeffaf bilgiyle verir.
 
-Sprint 1 konumlandırma adı: CareerMatch AI
+## Hedef kitle
 
-## Ürün Açıklaması
+- İş arayanlar ve yeni mezunlar
+- Staj başvurusu yapan öğrenciler
+- Kariyer değişikliği yapan adaylar
+- Aday-pozisyon uyumunu ön değerlendirmek isteyen İK ekipleri
 
-Akıllı CV, kullanıcıların yüklediği CV belgelerini yapay zeka ile analiz eden ve iş ilanlarıyla uygunluk oranını hesaplayan akıllı bir kariyer destek platformudur.
+## MVP'de çalışan özellikler
 
-CareerMatch AI yaklaşımıyla ürün yalnızca bir CV-ilan skor aracı değildir. Adayın CV'sindeki kanıtları ilan gereksinimleriyle eşleştirir, eksik becerileri gösterir, başvuruya hazırlık skoru üretir ve başvuru öncesi etik gelişim önerileri sunar.
+- CV metni girişi ve PDF/DOCX dosyasından metin çıkarma
+- İş veya staj ilanı metni girişi ile örnek veri seçimi
+- İş Başvurusu ve Staj Başvurusu modu
+- Eşleşme skoru ve başvuruya hazırlık skoru
+- Skor açıklaması, eşleşen/eksik beceriler ve kanıt tablosu
+- Staj moduna özel değerlendirme
+- Mini portfolyo projesi, etik CV geliştirme ve mülakat soruları
+- Backend erişilemediğinde demo akışını koruyan istemci tarafı analiz yedeği
 
-## Ürün Özellikleri
+## Ürün görseli
 
-- PDF/DOCX formatındaki CV'yi analiz etme
-- Yetenekleri otomatik çıkarma
-- İş ilanındaki gereksinimleri analiz etme
-- CV ve ilan arasında benzerlik skoru oluşturma
-- Eksik yetenekler için öneriler sunma
-- Kullanıcıya geliştirme tavsiyeleri verme
-- Kanıt tabanlı eşleşme tablosu
-- İş başvurusu ve staj başvurusu modu
-- Başvuruya hazırlık skoru
-- Mini portfolyo proje önerisi
-- Etik CV iyileştirme önerileri
-- İlan odaklı mülakat soruları
+![CareerMatch AI ürün ekranı](docs/assets/product_screenshot_sprint1.png)
 
-## Hedef Kitle
-
-- İş arayan adaylar
-- Yeni mezunlar
-- Kariyer değişikliği yapmak isteyen kişiler
-- İnsan kaynakları uzmanları
+Sprint 2 teslim panosu: [SVG görsel](docs/assets/sprint2_board_snapshot.svg). Görseller, ürünün ve sprint çıktılarının repo içinde incelenebilmesi için eklenmiştir.
 
 ## Teknolojiler
 
-- Python
-- FastAPI
-- React
-- Vite
-- NLP için Sprint 1'de kural tabanlı anahtar kelime çıkarımı
-- Gelecek sprintler için LLM API, Sentence Transformers ve PostgreSQL
+- Frontend: React, Vite, Axios, Mammoth, PDF.js
+- Backend: Python, FastAPI, Pydantic, Uvicorn
+- Eşleştirme: kural tabanlı anahtar kelime/beceri çıkarımı
 
-## Sprint 1 Ürün Akışı
+## Yerel kurulum ve çalıştırma
 
-Sprint 1 hedefi; çalışan bir ürün akışı, özgün ürün özellikleri ve GitHub üzerinde izlenebilir dokümantasyon oluşturmaktır.
-
-## Ürün Görseli
-
-![CareerMatch AI Sprint 1 ürün görseli](docs/assets/product_screenshot_sprint1.png)
-
-## Sprint Teslim Düzeni
-
-Bootcamp kılavuzunda her sprint sonunda beklenen proje yönetimi çıktıları sprint klasörleri altında düzenlendi:
-
-1. Backlog dağıtma mantığı
-2. Daily Scrum notları
-3. Sprint Board Updates
-4. Ürün durumu
-5. Sprint Review
-6. Sprint Retrospective
-
-Tek sayfa Sprint 1 teslim özeti: [sprint-1/README.md](sprint-1/README.md)
-
-Tek sayfa Sprint 2 teslim özeti: [sprint-2/README.md](sprint-2/README.md)
-
-Ürün akışı:
-
-1. Kullanıcı CV metni girer veya PDF/DOCX dosyasından metin çıkarır.
-2. Kullanıcı iş/staj ilanı metni girer veya hazır örnek ilan seçer.
-3. Kullanıcı İş Başvurusu veya Staj Başvurusu modunu seçer.
-4. Backend CV becerilerini ve ilan gereksinimlerini çıkarır.
-5. Sistem eşleşme skoru, başvuruya hazırlık skoru, kanıt tablosu, eksik beceriler, mini proje önerisi, etik CV önerileri ve mülakat soruları üretir.
-6. Frontend sonuçları tek ekranda gösterir.
-
-## Yerel Kurulum
+Ön koşullar: Node.js 18+ ve Python 3.10+.
 
 ### Backend
 
+`backend/app.py`, frontend'in kullandığı gerçek analiz API giriş noktasıdır. API `POST /analyze` ve `GET /health` uçlarını sunar.
+
 ```bash
 cd backend
-pip install -r requirements.txt
-uvicorn app:app --reload
+python3 -m pip install -r requirements.txt
+python3 -m uvicorn app:app --reload
 ```
 
-Backend varsayılan adres: `http://127.0.0.1:8000`
+Backend varsayılan olarak `http://127.0.0.1:8000` adresinde çalışır.
 
 ### Frontend
+
+Proje kök dizininde:
 
 ```bash
 npm install
 npm run dev
 ```
 
-Frontend varsayılan adres: `http://localhost:5173`
+Frontend varsayılan olarak `http://localhost:5173` adresinde çalışır. Farklı bir backend adresi için `.env` içinde `VITE_API_URL` tanımlanabilir.
 
-## API
+## API örneği
 
 ```http
 POST /analyze
+Content-Type: application/json
 ```
-
-Örnek istek:
 
 ```json
 {
@@ -123,18 +89,32 @@ POST /analyze
 }
 ```
 
-## Dokümantasyon
+Yanıt; `match_score`, `readiness_score`, `score_explanation`, eşleşen/eksik beceriler ve kanıt tablosu gibi alanları içerir.
 
-- [Ürün vizyonu](docs/product_vision.md)
-- [Takım rolleri](docs/team_roles.md)
-- [Kullanıcı personaları](docs/user_personas.md)
-- [Ürün backlog](docs/product_backlog.md)
-- [Özgünlük noktaları](docs/originality_points.md)
-- [AI mimarisi](docs/ai_architecture.md)
-- [Sprint 1 teslim özeti](sprint-1/README.md)
-- [Sprint 1 planı](sprint-1/sprint_planning.md)
-- [Sprint 1 ürün durumu](sprint-1/product_status.md)
-- [Sprint 2 teslim özeti](sprint-2/README.md)
-- [Sprint 2 planı](sprint-2/sprint_planning.md)
-- [Sprint 2 ürün durumu](sprint-2/product_status.md)
-- [Sprint 2 test sonuçları](docs/test_results_sprint2.md)
+## Kısa demo akışı
+
+1. CV metnini yapıştırın veya PDF/DOCX dosyası yükleyin.
+2. İş/staj ilanı metnini girin ve başvuru türünü seçin.
+3. **Analiz Et** akışını başlatın.
+4. Skorları, neden oluştuğunu, kanıtları ve eksik becerileri inceleyin.
+5. Portfolyo, etik CV ve mülakat önerileriyle sonraki adımı belirleyin.
+
+Tekrarlanabilir iki ayrıntılı senaryo: [final demo senaryoları](sprint-3/demo_scenarios.md).
+
+## Teslim dokümanları
+
+- [Ürün vizyonu](docs/product_vision.md), [backlog](docs/product_backlog.md), [özgünlük noktaları](docs/originality_points.md), [AI mimarisi](docs/ai_architecture.md)
+- [Sprint 1 teslim özeti](sprint-1/README.md), [Sprint 1 planı](sprint-1/sprint_planning.md), [Sprint 1 ürün durumu](sprint-1/product_status.md), [Sprint 1 review](sprint-1/sprint_review.md), [Sprint 1 retrospective](sprint-1/sprint_retrospective.md)
+- [Sprint 2 teslim özeti](sprint-2/README.md), [Sprint 2 planı](sprint-2/sprint_planning.md), [Sprint 2 ürün durumu](sprint-2/product_status.md), [Sprint 2 review](sprint-2/sprint_review.md), [Sprint 2 retrospective](sprint-2/sprint_retrospective.md)
+- [Final teslim özeti](sprint-3/README.md), [final ürün durumu](sprint-3/final_product_status.md), [final review](sprint-3/final_review.md), [final retrospective](sprint-3/final_retrospective.md), [final test sonuçları](sprint-3/final_test_results.md)
+
+## Test ve deployment durumu
+
+- Backend birim testleri: `cd backend && python3 -m unittest discover -s tests`
+- Frontend production build: `npm run build`
+- Son doğrulama sonuçları: [final test sonuçları](sprint-3/final_test_results.md)
+- Canlı production URL henüz tanımlanmadı. Deployment için önerilen kombinasyon Render (FastAPI) + Vercel (React) olup CORS ayarı ve platform hesapları gerekir: [deployment notu](docs/deployment-options.md)
+
+## MVP sınırları ve sonraki adımlar
+
+Bu teslimde eşleştirme kural tabanlıdır; LLM/embedding tabanlı anlamsal eşleştirme yapılmamıştır. Taranmış PDF'ler için OCR, kullanıcı hesabı, analiz geçmişi ve PostgreSQL kalıcı veri katmanı MVP kapsamı dışındadır. Açık işler ve öncelikleri [ürün backlog](docs/product_backlog.md) içinde görünür tutulur.
