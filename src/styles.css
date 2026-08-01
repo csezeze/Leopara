@@ -109,6 +109,50 @@ textarea {
   filter: drop-shadow(0 14px 24px rgba(190, 50, 110, 0.1));
 }
 
+.leopara-speech-bubble {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  margin: 0 0 18px;
+  padding: 13px 14px;
+  border: 1px solid #ebc7d5;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.92);
+  box-shadow: 0 12px 28px rgba(111, 30, 63, 0.06);
+}
+
+.leopara-speech-bubble::before,
+.leopara-speech-bubble::after {
+  position: absolute;
+  left: 50%;
+  width: 0;
+  height: 0;
+  content: "";
+  transform: translateX(-50%);
+}
+
+.leopara-speech-bubble::before {
+  top: -11px;
+  border-right: 10px solid transparent;
+  border-bottom: 11px solid #ebc7d5;
+  border-left: 10px solid transparent;
+}
+
+.leopara-speech-bubble::after {
+  top: -9px;
+  border-right: 9px solid transparent;
+  border-bottom: 10px solid #ffffff;
+  border-left: 9px solid transparent;
+}
+
+.leopara-speech-bubble p {
+  margin: 0;
+  color: var(--text);
+  font-size: 0.88rem;
+  font-weight: 600;
+  line-height: 1.5;
+}
+
 .leopara-rail-card {
   position: relative;
   z-index: 2;
@@ -211,9 +255,9 @@ textarea {
 .leopara-side-visual-right {
   position: absolute;
   z-index: 3;
-  top: 344px;
-  right: -148px;
-  width: 260px;
+  top: 500px;
+  right: -160px;
+  width: 190px;
   margin-top: 0;
   overflow: hidden;
   aspect-ratio: 1.45;
