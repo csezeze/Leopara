@@ -14,6 +14,8 @@ class AnalyzeRequest(BaseModel):
 
 class EvidenceItem(BaseModel):
     requirement: str
+    priority: Literal["required", "preferred", "bonus"] = "required"
+    priority_weight: float = 1.0
     status: Literal["matched", "missing"]
     evidence: str | None = None
 
@@ -36,6 +38,7 @@ class AnalyzeResponse(BaseModel):
     score_explanation: str
     matched_skills: list[str]
     missing_skills: list[str]
+    critical_missing_skills: list[str] = Field(default_factory=list)
     evidence_table: list[EvidenceItem]
     internship_analysis: InternshipAnalysis
     mini_project_recommendation: str

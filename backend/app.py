@@ -90,6 +90,7 @@ def analyze(request: AnalyzeRequest) -> AnalyzeResponse:
         match_result["matched_skills"],
         match_result["missing_skills"],
         request.application_type,
+        match_result["critical_missing_skills"],
     )
 
     return AnalyzeResponse(
@@ -98,6 +99,7 @@ def analyze(request: AnalyzeRequest) -> AnalyzeResponse:
         score_explanation=score_explanation,
         matched_skills=match_result["matched_skills"],
         missing_skills=match_result["missing_skills"],
+        critical_missing_skills=match_result["critical_missing_skills"],
         evidence_table=match_result["evidence_table"],
         internship_analysis=build_internship_analysis(cv_profile, request.application_type),
         mini_project_recommendation=recommend_mini_project(

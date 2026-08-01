@@ -10,9 +10,16 @@ function getScoreClass(score) {
   return "score-low";
 }
 
+const priorityLabels = {
+  required: "Zorunlu",
+  preferred: "Tercih Edilen",
+  bonus: "Ek Avantaj",
+};
+
 function ResultCard({ result }) {
   const scoreClass = getScoreClass(result.match_score);
   const readinessClass = getScoreClass(result.readiness_score);
+  const criticalMissingSkills = result.critical_missing_skills || [];
 
   return (
     <article className="result-card">
@@ -69,6 +76,22 @@ function ResultCard({ result }) {
         </div>
       </div>
 
+      {criticalMissingSkills.length ? (
+        <div className="result-block critical-missing-block">
+          <strong>Kritik Eksikler</strong>
+          <p className="helper-text">
+            İlanda zorunlu olarak belirtilen bu beceriler öncelikli geliştirme alanlarıdır.
+          </p>
+          <div className="tag-list">
+            {criticalMissingSkills.map((skill) => (
+              <span key={skill} className="tag tag-critical">
+                {skill}
+              </span>
+            ))}
+          </div>
+        </div>
+      ) : null}
+
       <div className="result-block">
         <strong>Kanıt Tabanlı Eşleşme</strong>
         {result.evidence_table.length ? (
@@ -77,6 +100,7 @@ function ResultCard({ result }) {
               <thead>
                 <tr>
                   <th>Gereksinim</th>
+                  <th>Öncelik</th>
                   <th>Durum</th>
                   <th>CV Kanıtı</th>
                 </tr>
@@ -85,6 +109,11 @@ function ResultCard({ result }) {
                 {result.evidence_table.map((row) => (
                   <tr key={row.requirement}>
                     <td>{row.requirement}</td>
+                    <td>
+                      <span className={`priority-pill ${row.priority || "required"}`}>
+                        {priorityLabels[row.priority] || priorityLabels.required}
+                      </span>
+                    </td>
                     <td>
                       <span className={`status-pill ${row.status}`}>
                         {row.status === "matched" ? "Eşleşti" : "Eksik"}

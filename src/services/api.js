@@ -99,6 +99,48 @@ const skillEvidenceKeywords = [
   "yonettim",
 ];
 
+const requirementPriorityWeights = {
+  required: 1,
+  preferred: 0.6,
+  bonus: 0.3,
+};
+
+const requirementPriorityMarkers = {
+  required: [
+    "zorunlu",
+    "zorunludur",
+    "şart",
+    "şarttır",
+    "gerekli",
+    "gereklidir",
+    "gerekmektedir",
+    "aranmaktadır",
+    "beklenir",
+    "required",
+    "must",
+  ],
+  preferred: [
+    "tercihen",
+    "tercih edilen",
+    "tercih edilir",
+    "tercih sebebi",
+    "tercih sebebidir",
+    "tercih nedeni",
+    "tercih nedenidir",
+    "preferred",
+  ],
+  bonus: [
+    "ek avantaj",
+    "ek avantajdır",
+    "avantaj",
+    "avantajdır",
+    "artı",
+    "artıdır",
+    "plus",
+    "nice to have",
+  ],
+};
+
 function normalizeText(text) {
   return text
     .toLocaleLowerCase("tr")
@@ -123,6 +165,110 @@ function keywordExists(normalizedText, keyword) {
   const pattern = new RegExp(`(^|[^a-z0-9])${escapeRegExp(normalizedKeyword)}(?=$|[^a-z0-9])`);
 
   return pattern.test(normalizedText);
+}
+
+function findKeywordPositions(normalizedText, keyword) {
+  const normalizedKeyword = normalizeText(keyword);
+
+  if (!normalizedKeyword) {
+    return [];
+  }
+
+  const pattern = new RegExp(
+    `(^|[^a-z0-9])(${escapeRegExp(normalizedKeyword)})(?=$|[^a-z0-9])`,
+    "g",
+  );
+  const positions = [];
+  let match = pattern.exec(normalizedText);
+
+  while (match) {
+    positions.push(match.index + match[1].length);
+    match = pattern.exec(normalizedText);
+  }
+
+  return positions;
+}
+
+function splitSentences(text) {
+  return text
+    .split(/[.!?\n;]/)
+    .map((sentence) => sentence.trim())
+    .filter(Boolean);
+}
+
+function findSkillPositions(normalizedSentence, skill) {
+  return (skillKeywords[skill] || [skill]).flatMap((keyword) =>
+    findKeywordPositions(normalizedSentence, keyword),
+  );
+}
+
+function findNearestPriority(normalizedSentence, skillPositions) {
+  const markerPositions = Object.entries(requirementPriorityMarkers).flatMap(
+    ([priority, markers]) => markers.flatMap((marker) =>
+      findKeywordPositions(normalizedSentence, marker).map((position) => ({
+        priority,
+        position,
+      })),
+    ),
+  );
+
+  if (!markerPositions.length) {
+    return null;
+  }
+
+  return markerPositions.reduce((nearest, candidate) => {
+    const distance = Math.min(
+      ...skillPositions.map((skillPosition) => Math.abs(candidate.position - skillPosition)),
+    );
+    const nearestDistance = Math.min(
+      ...skillPositions.map((skillPosition) => Math.abs(nearest.position - skillPosition)),
+    );
+
+    if (distance < nearestDistance) {
+      return candidate;
+    }
+
+    if (
+      distance === nearestDistance
+      && requirementPriorityWeights[candidate.priority] > requirementPriorityWeights[nearest.priority]
+    ) {
+      return candidate;
+    }
+
+    return nearest;
+  }).priority;
+}
+
+function buildRequirementDetails(postingText) {
+  const requirements = findSkills(postingText);
+  const sentences = splitSentences(postingText);
+
+  return requirements.map((skill) => {
+    const detectedPriorities = sentences.flatMap((sentence) => {
+      const normalizedSentence = normalizeText(sentence);
+      const skillPositions = findSkillPositions(normalizedSentence, skill);
+
+      if (!skillPositions.length) {
+        return [];
+      }
+
+      const priority = findNearestPriority(normalizedSentence, skillPositions);
+      return priority ? [priority] : [];
+    });
+    const priority = detectedPriorities.length
+      ? detectedPriorities.reduce((highest, candidate) =>
+        requirementPriorityWeights[candidate] > requirementPriorityWeights[highest]
+          ? candidate
+          : highest,
+      )
+      : "required";
+
+    return {
+      skill,
+      priority,
+      weight: requirementPriorityWeights[priority],
+    };
+  });
 }
 
 function findSkills(text) {
@@ -192,15 +338,27 @@ function getEvidenceWeight(text, skill) {
 
 function buildFallbackAnalysis(payload) {
   const cvSkills = findSkills(payload.cv_text);
-  const requirements = findSkills(payload.posting_text);
+  const requirementDetails = buildRequirementDetails(payload.posting_text);
+  const requirements = requirementDetails.map((detail) => detail.skill);
   const matchedSkills = requirements.filter((skill) => cvSkills.includes(skill));
   const missingSkills = requirements.filter((skill) => !cvSkills.includes(skill));
-  const matchedWeight = matchedSkills.reduce(
-    (total, skill) => total + getEvidenceWeight(payload.cv_text, skill),
+  const criticalMissingSkills = requirementDetails
+    .filter((detail) => detail.priority === "required" && !cvSkills.includes(detail.skill))
+    .map((detail) => detail.skill);
+  const matchedWeight = requirementDetails.reduce(
+    (total, detail) => total + (
+      cvSkills.includes(detail.skill)
+        ? getEvidenceWeight(payload.cv_text, detail.skill) * detail.weight
+        : 0
+    ),
     0,
   );
-  const matchScore = requirements.length
-    ? Math.round((matchedWeight / requirements.length) * 100)
+  const totalRequirementWeight = requirementDetails.reduce(
+    (total, detail) => total + detail.weight,
+    0,
+  );
+  const matchScore = totalRequirementWeight
+    ? Math.round((matchedWeight / totalRequirementWeight) * 100)
     : 0;
   const normalizedCv = normalizeText(payload.cv_text);
   const hasProject = /(^|[^a-z0-9])(proje|project)(?=$|[^a-z0-9])/.test(normalizedCv);
@@ -213,24 +371,41 @@ function buildFallbackAnalysis(payload) {
       matchScore + (hasProject ? 10 : 0) + (hasGithub ? 8 : 0) + (hasCoursework ? 6 : 0) - missingSkills.length * 4,
     ),
   );
+  const otherMissingSkills = missingSkills.filter(
+    (skill) => !criticalMissingSkills.includes(skill),
+  );
+  const criticalSummary = criticalMissingSkills.length
+    ? `Kritik eksikler: ${criticalMissingSkills.slice(0, 3).join(", ")}.`
+    : "";
+  const otherMissingSummary = otherMissingSkills.length
+    ? `Diğer geliştirilecek alanlar: ${otherMissingSkills.slice(0, 3).join(", ")}.`
+    : !criticalMissingSkills.length
+      ? "Belirgin bir eksik beceri görünmüyor."
+      : "";
 
   return {
     match_score: matchScore,
     readiness_score: readinessScore,
     score_explanation:
       matchedSkills.length || missingSkills.length
-        ? `CV metni ile ilan gereksinimleri karşılaştırıldı. Eşleşen alanlar: ${
-            matchedSkills.slice(0, 3).join(", ") || "belirgin eşleşme yok"
-          }. Geliştirilmesi gereken alanlar: ${
-            missingSkills.slice(0, 3).join(", ") || "belirgin eksik yok"
-          }.`
+        ? [
+          "CV metni ile ilan gereksinimleri önceliklerine göre karşılaştırıldı.",
+          `Eşleşen alanlar: ${matchedSkills.slice(0, 3).join(", ") || "belirgin eşleşme yok"}.`,
+          criticalSummary,
+          otherMissingSummary,
+        ].filter(Boolean).join(" ")
         : "İlanda sistemin tanıdığı teknik gereksinim bulunamadığı için skor 0 olarak hesaplandı.",
     matched_skills: matchedSkills,
     missing_skills: missingSkills,
-    evidence_table: requirements.map((requirement) => ({
-      requirement,
-      status: matchedSkills.includes(requirement) ? "matched" : "missing",
-      evidence: matchedSkills.includes(requirement) ? findEvidence(payload.cv_text, requirement) : null,
+    critical_missing_skills: criticalMissingSkills,
+    evidence_table: requirementDetails.map((detail) => ({
+      requirement: detail.skill,
+      priority: detail.priority,
+      priority_weight: detail.weight,
+      status: matchedSkills.includes(detail.skill) ? "matched" : "missing",
+      evidence: matchedSkills.includes(detail.skill)
+        ? findEvidence(payload.cv_text, detail.skill)
+        : null,
     })),
     internship_analysis: {
       enabled: payload.application_type === "internship",

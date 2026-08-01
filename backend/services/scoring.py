@@ -32,6 +32,7 @@ def build_score_explanation(
     matched_skills: list[str],
     missing_skills: list[str],
     application_type: str,
+    critical_missing_skills: list[str] | None = None,
 ) -> str:
     if match_score >= 75:
         match_summary = "CV'niz ilandaki gereksinimlerle güçlü bir uyum gösteriyor."
@@ -53,10 +54,21 @@ def build_score_explanation(
         if matched_skills
         else "Henüz öne çıkan eşleşen bir beceri tespit edilmedi."
     )
+    critical_missing_skills = critical_missing_skills or []
+    other_missing_skills = [
+        skill for skill in missing_skills if skill not in critical_missing_skills
+    ]
+    critical_fragment = (
+        f"Kritik eksikler: {', '.join(critical_missing_skills[:3])}."
+        if critical_missing_skills
+        else ""
+    )
     missing_fragment = (
-        f"Geliştirilmesi gereken alanlar: {', '.join(missing_skills[:3])}."
-        if missing_skills
+        f"Diğer geliştirilecek alanlar: {', '.join(other_missing_skills[:3])}."
+        if other_missing_skills
         else "Belirgin bir eksik beceri görünmüyor."
+        if not critical_missing_skills
+        else ""
     )
 
     mode_fragment = (
@@ -70,7 +82,8 @@ def build_score_explanation(
             match_summary,
             readiness_summary,
             matched_fragment,
+            critical_fragment,
             missing_fragment,
             mode_fragment,
         ]
-    )
+    ).replace("  ", " ").strip()

@@ -4,10 +4,61 @@ from fastapi import HTTPException
 
 from app import analyze
 from models.schemas import AnalyzeRequest
+from services.job_analyzer import analyze_posting
 from services.skills import find_skills
 
 
 class AnalyzeApiTests(unittest.TestCase):
+    def test_posting_requirements_include_priority_levels(self) -> None:
+        details = {
+            item["skill"]: item
+            for item in analyze_posting(
+                "Python zorunludur. Docker tercih sebebidir. Git bilgisi ek avantajdır."
+            )["requirement_details"]
+        }
+
+        self.assertEqual(details["Python"]["priority"], "required")
+        self.assertEqual(details["Docker"]["priority"], "preferred")
+        self.assertEqual(details["Git"]["priority"], "bonus")
+
+    def test_repeated_skill_uses_highest_priority_once(self) -> None:
+        details = analyze_posting(
+            "Docker tercih sebebidir. Üretim ortamı için Docker zorunludur."
+        )["requirement_details"]
+
+        docker_details = [item for item in details if item["skill"] == "Docker"]
+        self.assertEqual(len(docker_details), 1)
+        self.assertEqual(docker_details[0]["priority"], "required")
+
+    def test_required_skill_has_more_score_weight_than_preferred_skill(self) -> None:
+        posting_text = "Python zorunludur. Docker tercih sebebidir."
+
+        required_match = analyze(
+            AnalyzeRequest(
+                cv_text=(
+                    "Bilgisayar muhendisligi ogrencisiyim. "
+                    "Python ile ders projesi gelistirdim ve GitHub uzerinde yayinladim."
+                ),
+                posting_text=posting_text,
+                application_type="job",
+            )
+        ).model_dump()
+        preferred_match = analyze(
+            AnalyzeRequest(
+                cv_text=(
+                    "Bilgisayar muhendisligi ogrencisiyim. "
+                    "Docker ile temel bir ders projesi gelistirdim ve sonucu portfolyoma ekledim."
+                ),
+                posting_text=posting_text,
+                application_type="job",
+            )
+        ).model_dump()
+
+        self.assertGreater(required_match["match_score"], preferred_match["match_score"])
+        self.assertIn("Docker", required_match["missing_skills"])
+        self.assertNotIn("Docker", required_match["critical_missing_skills"])
+        self.assertIn("Python", preferred_match["critical_missing_skills"])
+
     def test_analysis_does_not_log_cv_content(self) -> None:
         cv_text = (
             "Bilgisayar muhendisligi ogrencisiyim. "

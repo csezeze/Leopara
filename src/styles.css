@@ -802,6 +802,7 @@ textarea {
 
 .evidence-table {
   width: 100%;
+  min-width: 720px;
   border-collapse: collapse;
 }
 
@@ -833,6 +834,43 @@ textarea {
 .status-pill.missing {
   color: var(--primary);
   background: var(--surface-soft);
+}
+
+.priority-pill {
+  display: inline-flex;
+  white-space: nowrap;
+  border-radius: 999px;
+  padding: 5px 8px;
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+
+.priority-pill.required {
+  color: #9c294f;
+  background: #fae9ef;
+}
+
+.priority-pill.preferred {
+  color: #8a5b12;
+  background: #fff4d9;
+}
+
+.priority-pill.bonus {
+  color: #28675c;
+  background: #e9f5f1;
+}
+
+.critical-missing-block {
+  padding: 14px;
+  border-left: 4px solid var(--low);
+  border-radius: 0 6px 6px 0;
+  background: #fff5f8;
+}
+
+.tag-critical {
+  border-color: #e9b7c8;
+  background: #ffffff;
+  color: #9c294f;
 }
 
 .suggestion-list {
