@@ -26,7 +26,7 @@ function CvInput({
           <strong>CV gizliliğiniz</strong>
           <p>
             CV içeriğiniz yalnızca bu analizi oluşturmak için işlenir ve kalıcı olarak saklanmaz.
-            Temizle düğmesi CV, ilan ve analiz sonucunu bu ekrandan kaldırır.
+            Temizle düğmesine bastığınızda CV metni, ilan metni ve analiz sonuçları ekrandan silinir.
           </p>
         </div>
 
