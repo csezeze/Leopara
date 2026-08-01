@@ -1,18 +1,19 @@
 <p align="center">
-  <img src="public/brand/leopara-logo-round.png" alt="LEOPARA logo" width="96" />
+  <img src="public/brand/leopara-mark.png" alt="LEOPARA maskot" width="180" />
 </p>
 
-<h1 align="center">LEOPARA</h1>
+<h1 align="center">Selam, ben LEOPARA</h1>
 
 <p align="center">
   <strong>Akıllı CV ve İlan Eşleştirme</strong>
 </p>
 
 <p align="center">
-  CV'nizi iş veya staj ilanlarıyla karşılaştırır; eşleşen becerileri, eksik alanları, kanıtları ve başvuruya hazırlık önerilerini tek ekranda sunar.
+  CV'ni iş veya staj ilanlarıyla karşılaştırır; güçlü yönlerini, eksik becerilerini ve başvuruya hazırlık durumunu anlaşılır şekilde gösteririm.
 </p>
 
 <p align="center">
+  <a href="https://leopara.vercel.app"><strong>Canlı Demoyu Aç</strong></a> ·
   <a href="#çalışan-özellikler">Özellikler</a> ·
   <a href="#ürün-ekranları">Ürün Ekranları</a> ·
   <a href="#yerel-kurulum-ve-çalıştırma">Kurulum</a> ·
@@ -23,6 +24,10 @@
 ## Ürün özeti
 
 LEOPARA, adayın CV'sindeki beceri ve kanıtları iş veya staj ilanının gereksinimleriyle karşılaştıran çalışan bir başvuru hazırlık ürünüdür. Amaç yalnızca bir yüzde üretmek değil; adayın hangi becerilerinin örtüştüğünü, neleri geliştirebileceğini ve CV'sini etik biçimde nasıl güçlendirebileceğini görünür kılmaktır.
+
+- Canlı frontend: [https://leopara.vercel.app](https://leopara.vercel.app)
+- Canlı backend API: [https://lepora-api.onrender.com](https://lepora-api.onrender.com)
+- Sağlık kontrolü: [https://lepora-api.onrender.com/health](https://lepora-api.onrender.com/health)
 
 ## Takım
 
