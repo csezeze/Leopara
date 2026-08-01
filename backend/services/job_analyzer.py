@@ -1,4 +1,4 @@
-from services.skills import find_skills, normalize_text
+from services.skills import find_skills, keyword_exists, normalize_text
 
 
 def analyze_posting(posting_text: str) -> dict:
@@ -10,7 +10,7 @@ def analyze_posting(posting_text: str) -> dict:
 
     return {
         "requirements": requirements,
-        "is_internship": "staj" in normalized or "intern" in normalized,
+        "is_internship": keyword_exists(normalized, "staj") or keyword_exists(normalized, "intern"),
         "raw_text": posting_text,
     }
 
@@ -23,7 +23,6 @@ def infer_requirements_from_common_terms(normalized_text: str) -> list[str]:
     }
     inferred: list[str] = []
     for label, keywords in fallback_terms.items():
-        if any(keyword in normalized_text for keyword in keywords):
+        if any(keyword_exists(normalized_text, keyword) for keyword in keywords):
             inferred.append(label)
     return inferred
-

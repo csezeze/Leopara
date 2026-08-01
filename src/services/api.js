@@ -25,14 +25,36 @@ const skillKeywords = {
 };
 
 function normalizeText(text) {
-  return text.toLowerCase();
+  return text
+    .toLocaleLowerCase("tr")
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/ı/g, "i")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+function escapeRegExp(text) {
+  return text.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+
+function keywordExists(normalizedText, keyword) {
+  const normalizedKeyword = normalizeText(keyword);
+
+  if (!normalizedKeyword) {
+    return false;
+  }
+
+  const pattern = new RegExp(`(^|[^a-z0-9])${escapeRegExp(normalizedKeyword)}(?=$|[^a-z0-9])`);
+
+  return pattern.test(normalizedText);
 }
 
 function findSkills(text) {
   const normalized = normalizeText(text);
 
   return Object.entries(skillKeywords)
-    .filter(([, keywords]) => keywords.some((keyword) => normalized.includes(keyword)))
+    .filter(([, keywords]) => keywords.some((keyword) => keywordExists(normalized, keyword)))
     .map(([skill]) => skill);
 }
 
@@ -41,7 +63,7 @@ function findEvidence(text, skill) {
   const sentences = text.split(/[.!?\n;]/).map((sentence) => sentence.trim()).filter(Boolean);
 
   return sentences.find((sentence) =>
-    keywords.some((keyword) => normalizeText(sentence).includes(keyword)),
+    keywords.some((keyword) => keywordExists(normalizeText(sentence), keyword)),
   ) || null;
 }
 
@@ -54,9 +76,9 @@ function buildFallbackAnalysis(payload) {
     ? Math.round((matchedSkills.length / requirements.length) * 100)
     : 0;
   const normalizedCv = normalizeText(payload.cv_text);
-  const hasProject = /proje|project/.test(normalizedCv);
-  const hasGithub = /github|portfolio|portfolyo/.test(normalizedCv);
-  const hasCoursework = /ders|course/.test(normalizedCv);
+  const hasProject = /(^|[^a-z0-9])(proje|project)(?=$|[^a-z0-9])/.test(normalizedCv);
+  const hasGithub = /(^|[^a-z0-9])(github|portfolio|portfolyo)(?=$|[^a-z0-9])/.test(normalizedCv);
+  const hasCoursework = /(^|[^a-z0-9])(ders|course)(?=$|[^a-z0-9])/.test(normalizedCv);
   const readinessScore = Math.max(
     0,
     Math.min(
@@ -75,7 +97,7 @@ function buildFallbackAnalysis(payload) {
           }. Geliştirilmesi gereken alanlar: ${
             missingSkills.slice(0, 3).join(", ") || "belirgin eksik yok"
           }.`
-        : "Skorlar mevcut metinlere göre oluşturuldu.",
+        : "İlanda sistemin tanıdığı teknik gereksinim bulunamadığı için skor 0 olarak hesaplandı.",
     matched_skills: matchedSkills,
     missing_skills: missingSkills,
     evidence_table: requirements.map((requirement) => ({
@@ -86,7 +108,7 @@ function buildFallbackAnalysis(payload) {
     internship_analysis: {
       enabled: payload.application_type === "internship",
       strengths: [
-        hasProject ? "Akademik veya kişisel proje deneyimi bulunuyor." : "CV metni teknik beceri sinyalleri içeriyor.",
+        hasProject ? "Akademik veya kişisel proje deneyimi bulunuyor." : "CV metni sınırlı teknik beceri sinyali içeriyor.",
       ],
       weaknesses: [
         hasGithub ? "Portfolyo bağlantısı daha görünür yazılabilir." : "GitHub veya portfolyo bağlantısı eksik.",

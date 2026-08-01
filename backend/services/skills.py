@@ -1,3 +1,7 @@
+import re
+import unicodedata
+
+
 SKILL_KEYWORDS: dict[str, list[str]] = {
     "Python": ["python"],
     "FastAPI": ["fastapi"],
@@ -20,9 +24,29 @@ SKILL_KEYWORDS: dict[str, list[str]] = {
     "Deployment": ["deployment", "deploy", "vercel", "render", "railway"],
 }
 
+TURKISH_CHAR_MAP = str.maketrans({
+    "ı": "i",
+    "İ": "i",
+})
+
 
 def normalize_text(text: str) -> str:
-    return " ".join(text.lower().split())
+    lowered = text.translate(TURKISH_CHAR_MAP).lower()
+    without_accents = "".join(
+        char
+        for char in unicodedata.normalize("NFKD", lowered)
+        if not unicodedata.combining(char)
+    )
+    return " ".join(without_accents.split())
+
+
+def keyword_exists(normalized_text: str, keyword: str) -> bool:
+    normalized_keyword = normalize_text(keyword)
+    if not normalized_keyword:
+        return False
+
+    pattern = rf"(?<![a-z0-9]){re.escape(normalized_keyword)}(?![a-z0-9])"
+    return re.search(pattern, normalized_text) is not None
 
 
 def split_sentences(text: str) -> list[str]:
@@ -40,7 +64,7 @@ def find_skills(text: str) -> list[str]:
     normalized = normalize_text(text)
     found: list[str] = []
     for skill, keywords in SKILL_KEYWORDS.items():
-        if any(keyword in normalized for keyword in keywords):
+        if any(keyword_exists(normalized, keyword) for keyword in keywords):
             found.append(skill)
     return found
 
@@ -49,7 +73,6 @@ def find_evidence(text: str, skill: str) -> str | None:
     keywords = SKILL_KEYWORDS.get(skill, [skill.lower()])
     for sentence in split_sentences(text):
         normalized_sentence = normalize_text(sentence)
-        if any(keyword in normalized_sentence for keyword in keywords):
+        if any(keyword_exists(normalized_sentence, keyword) for keyword in keywords):
             return sentence
     return None
-
