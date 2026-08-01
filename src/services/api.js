@@ -22,6 +22,12 @@ const skillKeywords = {
   "REST API": ["rest api", "api", "endpoint"],
   HTML: ["html"],
   CSS: ["css"],
+  Agile: ["agile", "scrum", "sprint"],
+  Testing: ["test", "pytest", "unit test"],
+  Deployment: ["deployment", "deploy", "vercel", "render", "railway"],
+  Communication: ["iletişim", "communication"],
+  Teamwork: ["takım", "ekip", "team", "teamwork"],
+  "Problem Solving": ["problem solving", "problem çözme", "problem cozme"],
 };
 
 function normalizeText(text) {
@@ -56,6 +62,22 @@ function findSkills(text) {
   return Object.entries(skillKeywords)
     .filter(([, keywords]) => keywords.some((keyword) => keywordExists(normalized, keyword)))
     .map(([skill]) => skill);
+}
+
+function validateAnalysisPayload(payload) {
+  const cvSkills = findSkills(payload.cv_text);
+  const requirements = findSkills(payload.posting_text);
+  const matchedSkills = requirements.filter((skill) => cvSkills.includes(skill));
+
+  if (!requirements.length) {
+    throw new Error("İlan metninde analiz edilebilir bir gereksinim bulunamadı. Lütfen daha net bir ilan metni girin.");
+  }
+
+  if (!matchedSkills.length) {
+    throw new Error(
+      "Bu CV ile seçilen ilan arasında analiz edilebilir ortak bir beceri bulunamadı. Lütfen doğru CV ve ilan eşleşmesini kontrol edin.",
+    );
+  }
 }
 
 function findEvidence(text, skill) {
@@ -139,11 +161,17 @@ function buildFallbackAnalysis(payload) {
 }
 
 export async function analyzeApplication(payload) {
+  validateAnalysisPayload(payload);
+
   try {
     const response = await apiClient.post("/analyze", payload);
 
     return { ...response.data, isFallback: false };
   } catch (error) {
+    if (error.response?.status === 422 || error.response?.status === 400) {
+      throw new Error(error.response.data?.detail || "Analiz için gerekli bilgiler uygun değil.");
+    }
+
     return { ...buildFallbackAnalysis(payload), isFallback: true };
   }
 }

@@ -1,5 +1,7 @@
 import unittest
 
+from fastapi import HTTPException
+
 from app import analyze
 from models.schemas import AnalyzeRequest
 from services.skills import find_skills
@@ -38,21 +40,21 @@ class AnalyzeApiTests(unittest.TestCase):
 
         self.assertNotIn("Machine Learning", skills)
 
-    def test_machine_learning_requires_real_keyword_evidence(self) -> None:
-        payload = analyze(
-            AnalyzeRequest(
-                cv_text=(
-                    "Gebze Teknik Üniversitesi Bilgisayar Mühendisliği öğrencisiyim. "
-                    "Backend geliştirme, sistem programlama ve performans odaklı yazılım konularına ilgi duyuyorum."
-                ),
-                posting_text="Stajyer adayında Machine Learning bilgisi ve ML proje deneyimi beklenir.",
-                application_type="internship",
+    def test_incompatible_cv_is_not_analyzed(self) -> None:
+        with self.assertRaises(HTTPException) as context:
+            analyze(
+                AnalyzeRequest(
+                    cv_text=(
+                        "Gebze Teknik Üniversitesi Bilgisayar Mühendisliği öğrencisiyim. "
+                        "Backend geliştirme, sistem programlama ve performans odaklı yazılım konularına ilgi duyuyorum."
+                    ),
+                    posting_text="Stajyer adayında Machine Learning bilgisi ve ML proje deneyimi beklenir.",
+                    application_type="internship",
+                )
             )
-        ).model_dump()
 
-        self.assertEqual(payload["match_score"], 0)
-        self.assertEqual(payload["matched_skills"], [])
-        self.assertIn("Machine Learning", payload["missing_skills"])
+        self.assertEqual(context.exception.status_code, 422)
+        self.assertIn("ortak bir beceri bulunamadı", context.exception.detail)
 
     def test_real_ml_abbreviation_still_matches(self) -> None:
         skills = find_skills("Python ile ML modeli eğittim ve sonuçları değerlendirdim.")

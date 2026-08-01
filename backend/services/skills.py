@@ -22,6 +22,9 @@ SKILL_KEYWORDS: dict[str, list[str]] = {
     "Agile": ["agile", "scrum", "sprint"],
     "Testing": ["test", "pytest", "unit test"],
     "Deployment": ["deployment", "deploy", "vercel", "render", "railway"],
+    "Communication": ["iletişim", "communication"],
+    "Teamwork": ["takım", "ekip", "team", "teamwork"],
+    "Problem Solving": ["problem solving", "problem çözme", "problem cozme"],
 }
 
 TURKISH_CHAR_MAP = str.maketrans({

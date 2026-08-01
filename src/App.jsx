@@ -115,7 +115,7 @@ function App() {
       setIsFallbackAnalysis(Boolean(response.isFallback));
       setHasMatched(true);
     } catch (matchError) {
-      setError("Analiz sırasında bir sorun oluştu.");
+      setError(matchError.message || "Analiz sırasında bir sorun oluştu.");
       setAnalysis(null);
       setIsFallbackAnalysis(false);
       setHasMatched(false);

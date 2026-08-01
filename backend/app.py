@@ -1,4 +1,4 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 
 from models.schemas import AnalyzeRequest, AnalyzeResponse
@@ -39,6 +39,21 @@ def analyze(request: AnalyzeRequest) -> AnalyzeResponse:
     cv_profile = parse_cv(request.cv_text)
     posting_analysis = analyze_posting(request.posting_text)
     match_result = match_cv_to_posting(cv_profile, posting_analysis)
+
+    if not posting_analysis["requirements"]:
+        raise HTTPException(
+            status_code=422,
+            detail="İlan metninde analiz edilebilir bir gereksinim bulunamadı. Lütfen daha net bir ilan metni girin.",
+        )
+
+    if not match_result["matched_skills"]:
+        raise HTTPException(
+            status_code=422,
+            detail=(
+                "Bu CV ile seçilen ilan arasında analiz edilebilir ortak bir beceri bulunamadı. "
+                "Lütfen doğru CV ve ilan eşleşmesini kontrol edin."
+            ),
+        )
 
     readiness_score = calculate_readiness_score(
         match_result["match_score"],
