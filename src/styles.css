@@ -35,6 +35,7 @@ body {
   min-width: 320px;
   min-height: 100vh;
   overflow-x: clip;
+  font-size: 15px;
 }
 
 a {
@@ -61,40 +62,115 @@ textarea {
 .container {
   position: relative;
   z-index: 2;
-  width: min(1180px, calc(100% - 32px));
+  grid-column: 2;
+  min-width: 0;
+  width: min(1020px, 100%);
   margin: 0 auto;
-  padding: 28px 0 56px;
+  padding: 0 0 56px;
 }
 
-.brand-side-mascots {
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-  overflow: clip;
-  pointer-events: none;
-  user-select: none;
+.leopara-page-shell {
+  width: min(1496px, calc(100% - 48px));
+  margin: 32px auto 0;
+  display: grid;
+  grid-template-columns: 210px minmax(0, 1020px) 210px;
+  gap: 28px;
+  align-items: start;
+}
+
+.leopara-side-rail {
+  min-width: 0;
+}
+
+.leopara-left-rail {
+  grid-column: 1;
+  padding-top: 38px;
+}
+
+.leopara-right-rail {
+  grid-column: 3;
+  padding-top: 205px;
 }
 
 .brand-side-mascot {
-  position: absolute;
+  display: block;
+  width: min(100%, 165px);
   height: auto;
+  margin: 0 auto 20px;
   pointer-events: none;
   user-select: none;
   filter: drop-shadow(0 14px 24px rgba(190, 50, 110, 0.1));
 }
 
-.brand-side-mascot-left {
-  top: 165px;
-  left: max(10px, calc(50% - 850px));
-  width: clamp(160px, 12vw, 220px);
-  opacity: 0.82;
+.leopara-rail-card {
+  width: 100%;
+  padding: 18px;
+  border: 1px solid rgba(202, 57, 113, 0.18);
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.68);
+  box-shadow: 0 14px 32px rgba(111, 30, 63, 0.06);
+  backdrop-filter: blur(10px);
 }
 
-.brand-side-mascot-right {
-  top: 420px;
-  right: max(10px, calc(50% - 850px));
-  width: clamp(170px, 13vw, 240px);
-  opacity: 0.86;
+.leopara-rail-card h2 {
+  margin: 0 0 14px;
+  color: var(--text);
+  font-size: 1rem;
+  line-height: 1.25;
+}
+
+.leopara-step-list {
+  display: grid;
+  gap: 14px;
+}
+
+.leopara-step {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 10px;
+  align-items: start;
+}
+
+.leopara-step > span {
+  display: inline-grid;
+  width: 30px;
+  height: 30px;
+  place-items: center;
+  border-radius: 999px;
+  border: 1px solid #f2cbd9;
+  background: #fff0f5;
+  color: #c73670;
+  font-size: 0.84rem;
+  font-weight: 800;
+}
+
+.leopara-step strong {
+  display: block;
+  margin-bottom: 3px;
+  font-size: 0.95rem;
+}
+
+.leopara-step p,
+.leopara-chip-list span {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.9rem;
+  line-height: 1.45;
+}
+
+.leopara-chip-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.leopara-chip-list span {
+  padding: 7px 10px;
+  border-radius: 999px;
+  border: 1px solid #f2cbd9;
+  background: #fff0f5;
+  color: #9d315b;
+  font-weight: 650;
 }
 
 .site-header {
@@ -140,7 +216,7 @@ textarea {
 
 .brand-copy span {
   display: block;
-  font-size: 0.74rem;
+  font-size: 0.86rem;
   line-height: 1.2;
 }
 
@@ -172,7 +248,7 @@ textarea {
 }
 
 .hero {
-  padding: 18px 0 20px;
+  padding: 0 0 20px;
 }
 
 .hero-panel,
@@ -188,7 +264,7 @@ textarea {
 }
 
 .hero-panel {
-  padding: 30px;
+  padding: 36px;
 }
 
 .eyebrow {
@@ -196,9 +272,10 @@ textarea {
   padding: 7px 12px;
   border-radius: 999px;
   color: var(--primary);
+  font-size: 0.92rem;
   font-weight: 700;
   background: var(--surface-soft);
-  margin-bottom: 14px;
+  margin-bottom: 16px;
 }
 
 .hero h1,
@@ -208,15 +285,16 @@ textarea {
 }
 
 .hero h1 {
-  max-width: 760px;
-  font-size: clamp(2rem, 4vw, 3.5rem);
+  max-width: 820px;
+  font-size: clamp(2.875rem, 3vw, 3.25rem);
   line-height: 1.05;
 }
 
 .hero p {
-  max-width: 690px;
-  margin: 14px 0 0;
-  font-size: 1.08rem;
+  max-width: 760px;
+  margin: 16px 0 0;
+  font-size: 1.07rem;
+  line-height: 1.55;
   color: var(--muted);
 }
 
@@ -227,12 +305,12 @@ textarea {
 }
 
 .feature-grid {
-  margin-top: 24px;
+  margin-top: 26px;
   grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
 .feature-card {
-  padding: 18px;
+  padding: 20px;
   border-radius: 8px;
   background: #fffafb;
   border: 1px solid var(--border);
@@ -241,13 +319,18 @@ textarea {
 .feature-card strong {
   display: block;
   margin-bottom: 8px;
-  font-size: 1.02rem;
+  font-size: 1.06rem;
+}
+
+.feature-card p {
+  font-size: 0.97rem;
+  line-height: 1.5;
 }
 
 .dashboard-grid {
   display: grid;
   grid-template-columns: 1.05fr 0.95fr;
-  gap: 20px;
+  gap: 18px;
   margin-top: 20px;
   align-items: start;
 }
@@ -260,7 +343,7 @@ textarea {
 .card,
 .result-card,
 .empty-state {
-  padding: 22px;
+  padding: 24px;
 }
 
 .section-heading {
@@ -269,6 +352,13 @@ textarea {
 
 .section-heading p {
   margin: 8px 0 0;
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+.section-heading h2 {
+  font-size: 1.42rem;
+  line-height: 1.25;
 }
 
 .textarea {
@@ -281,7 +371,14 @@ textarea {
   border: 1px solid var(--border);
   background: #fffafb;
   color: var(--text);
+  font-size: 1.03rem;
+  line-height: 1.5;
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.textarea::placeholder {
+  color: #7d6973;
+  opacity: 1;
 }
 
 .posting-textarea {
@@ -314,6 +411,7 @@ textarea {
 .file-dropzone strong {
   display: block;
   margin-bottom: 6px;
+  font-size: 1rem;
 }
 
 .file-input {
@@ -323,7 +421,8 @@ textarea {
 
 .helper-text {
   margin: 0;
-  font-size: 0.92rem;
+  font-size: 0.97rem;
+  line-height: 1.5;
 }
 
 .error-text {
@@ -349,8 +448,11 @@ textarea {
 .mode-toggle button {
   border: 1px solid transparent;
   border-radius: 8px;
-  padding: 11px 16px;
+  min-height: 44px;
+  padding: 11px 17px;
   cursor: pointer;
+  font-size: 0.97rem;
+  font-weight: 650;
   transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
 }
 
@@ -444,6 +546,7 @@ textarea {
 .job-card h3,
 .result-card h3 {
   margin: 0;
+  font-size: 1.08rem;
 }
 
 .card-meta {
@@ -597,7 +700,7 @@ textarea {
   display: inline-flex;
   border-radius: 999px;
   padding: 5px 8px;
-  font-size: 0.82rem;
+  font-size: 0.84rem;
   font-weight: 700;
 }
 
@@ -656,23 +759,20 @@ textarea {
   }
 }
 
-@media (max-width: 1499px) and (min-width: 1280px) {
-  .brand-side-mascot-left {
-    left: max(8px, calc(50% - 790px));
-    width: min(11vw, 155px);
-    opacity: 0.62;
+@media (max-width: 1499px) {
+  .leopara-page-shell {
+    display: block;
+    width: min(1020px, calc(100% - 32px));
+    margin-top: 28px;
   }
 
-  .brand-side-mascot-right {
-    right: max(8px, calc(50% - 790px));
-    width: min(12vw, 170px);
-    opacity: 0.64;
-  }
-}
-
-@media (max-width: 1279px) {
-  .brand-side-mascots {
+  .leopara-side-rail {
     display: none;
+  }
+
+  .container {
+    grid-column: auto;
+    width: 100%;
   }
 }
 

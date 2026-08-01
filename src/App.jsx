@@ -127,53 +127,56 @@ function App() {
 
   return (
     <div className="page-shell">
-      <BrandSideMascots />
       <Header />
 
-      <main className="container">
-        <Hero />
+      <div className="leopara-page-shell">
+        <BrandSideMascots />
 
-        <section id="eslestirme" className="dashboard-grid">
-          <div className="dashboard-column">
-            <CvInput
-              cvText={cvText}
-              error={error}
+        <main className="container">
+          <Hero />
+
+          <section id="eslestirme" className="dashboard-grid">
+            <div className="dashboard-column">
+              <CvInput
+                cvText={cvText}
+                error={error}
+                isLoading={isLoading}
+                isFileProcessing={isFileProcessing}
+                fileInputKey={fileInputKey}
+                selectedFileName={selectedFileName}
+                fileReadSuccess={fileReadSuccess}
+                onChange={setCvText}
+                onFileChange={handleFileChange}
+                onClear={handleClear}
+                onFillSample={handleFillSample}
+                onMatch={handleMatch}
+              />
+            </div>
+
+            <div className="dashboard-column">
+              <JobList
+                jobs={mockJobs}
+                selectedJobId={selectedJobId}
+                postingText={postingText}
+                applicationType={applicationType}
+                onSelect={handleJobSelect}
+                onPostingChange={setPostingText}
+                onApplicationTypeChange={setApplicationType}
+              />
+            </div>
+          </section>
+
+          {hasMatched ? (
+            <ResultsSection
+              analysis={analysis}
               isLoading={isLoading}
-              isFileProcessing={isFileProcessing}
-              fileInputKey={fileInputKey}
-              selectedFileName={selectedFileName}
-              fileReadSuccess={fileReadSuccess}
-              onChange={setCvText}
-              onFileChange={handleFileChange}
-              onClear={handleClear}
-              onFillSample={handleFillSample}
-              onMatch={handleMatch}
+              isFallback={isFallbackAnalysis}
             />
-          </div>
-
-          <div className="dashboard-column">
-            <JobList
-              jobs={mockJobs}
-              selectedJobId={selectedJobId}
-              postingText={postingText}
-              applicationType={applicationType}
-              onSelect={handleJobSelect}
-              onPostingChange={setPostingText}
-              onApplicationTypeChange={setApplicationType}
-            />
-          </div>
-        </section>
-
-        {hasMatched ? (
-          <ResultsSection
-            analysis={analysis}
-            isLoading={isLoading}
-            isFallback={isFallbackAnalysis}
-          />
-        ) : (
-          <EmptyState />
-        )}
-      </main>
+          ) : (
+            <EmptyState />
+          )}
+        </main>
+      </div>
     </div>
   );
 }
