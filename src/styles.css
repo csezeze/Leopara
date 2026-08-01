@@ -86,17 +86,17 @@ textarea {
 }
 
 .brand-side-mascot-left {
-  top: 175px;
-  left: max(18px, calc(50% - 720px));
-  width: clamp(170px, 13vw, 230px);
-  opacity: 0.88;
+  top: 165px;
+  left: max(10px, calc(50% - 850px));
+  width: clamp(160px, 12vw, 220px);
+  opacity: 0.82;
 }
 
 .brand-side-mascot-right {
-  top: 445px;
-  right: max(18px, calc(50% - 720px));
-  width: clamp(185px, 14vw, 255px);
-  opacity: 0.92;
+  top: 420px;
+  right: max(10px, calc(50% - 850px));
+  width: clamp(170px, 13vw, 240px);
+  opacity: 0.86;
 }
 
 .site-header {
@@ -660,13 +660,15 @@ textarea {
 
 @media (max-width: 1499px) and (min-width: 1280px) {
   .brand-side-mascot-left {
-    width: min(12vw, 185px);
-    opacity: 0.7;
+    left: max(8px, calc(50% - 790px));
+    width: min(11vw, 155px);
+    opacity: 0.62;
   }
 
   .brand-side-mascot-right {
-    width: min(13vw, 200px);
-    opacity: 0.72;
+    right: max(8px, calc(50% - 790px));
+    width: min(12vw, 170px);
+    opacity: 0.64;
   }
 }
 
