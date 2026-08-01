@@ -29,7 +29,7 @@ async function readPdfFile(file) {
 
     if (!text) {
       throw new Error(
-        "PDF dosyasından metin çıkarılamadı. Lütfen metin içeren bir PDF yükleyin."
+        "Bu PDF taranmış olabilir. Lütfen metin içeren farklı bir PDF deneyin veya CV metnini manuel girin."
       );
     }
 
@@ -37,12 +37,8 @@ async function readPdfFile(file) {
   } catch (error) {
     console.error("PDF okuma hatası:", error);
 
-    if (error.message?.includes("metin çıkarılamadı")) {
-      throw error;
-    }
-
     throw new Error(
-      "PDF dosyası okunamadı. Dosyanın geçerli ve bozuk olmadığından emin olun."
+      "Bu PDF taranmış olabilir. Lütfen metin içeren farklı bir PDF deneyin veya CV metnini manuel girin."
     );
   }
 }
@@ -57,7 +53,7 @@ async function readDocxFile(file) {
 
     if (!text) {
       throw new Error(
-        "DOCX dosyasından metin çıkarılamadı. Lütfen metin içeren bir DOCX yükleyin."
+        "Dosya okunamadı. Lütfen dosyayı kontrol edin veya CV metnini manuel girin."
       );
     }
 
@@ -65,12 +61,8 @@ async function readDocxFile(file) {
   } catch (error) {
     console.error("DOCX okuma hatası:", error);
 
-    if (error.message?.includes("metin çıkarılamadı")) {
-      throw error;
-    }
-
     throw new Error(
-      "DOCX dosyası okunamadı. Dosyanın geçerli ve bozuk olmadığından emin olun."
+      "Dosya okunamadı. Lütfen dosyayı kontrol edin veya CV metnini manuel girin."
     );
   }
 }

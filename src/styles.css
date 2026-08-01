@@ -289,6 +289,12 @@ textarea {
   font-weight: 600;
 }
 
+.file-success-text {
+  margin: 0;
+  color: var(--secondary);
+  font-weight: 600;
+}
+
 .button-row {
   display: flex;
   flex-wrap: wrap;
