@@ -51,6 +51,15 @@ function BrandSideMascots() {
             ))}
           </div>
         </div>
+        <div className="leopara-side-visual leopara-side-visual-left" aria-hidden="true">
+          <img
+            src="/brand/leopara-profile-visual.png"
+            alt=""
+            width="1536"
+            height="1024"
+            draggable={false}
+          />
+        </div>
       </aside>
 
       <aside className="leopara-side-rail leopara-right-rail">
@@ -70,6 +79,15 @@ function BrandSideMascots() {
               <span key={item}>{item}</span>
             ))}
           </div>
+        </div>
+        <div className="leopara-side-visual leopara-side-visual-right" aria-hidden="true">
+          <img
+            src="/brand/leopara-insight-visual.png"
+            alt=""
+            width="1536"
+            height="1024"
+            draggable={false}
+          />
         </div>
       </aside>
     </>

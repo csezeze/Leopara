@@ -63,98 +63,107 @@ textarea {
   position: relative;
   z-index: 2;
   grid-column: 2;
+  grid-row: 1;
   min-width: 0;
-  width: min(1020px, 100%);
+  width: 100%;
   margin: 0 auto;
   padding: 0 0 56px;
 }
 
 .leopara-page-shell {
+  position: relative;
+  isolation: isolate;
   width: min(1496px, calc(100% - 48px));
-  margin: 32px auto 0;
+  margin: 30px auto 0;
   display: grid;
-  grid-template-columns: 210px minmax(0, 1020px) 210px;
-  gap: 28px;
+  grid-template-columns: 190px minmax(0, 1080px) 190px;
+  gap: 18px;
   align-items: start;
 }
 
 .leopara-side-rail {
+  position: relative;
+  grid-row: 1;
   min-width: 0;
 }
 
 .leopara-left-rail {
   grid-column: 1;
-  padding-top: 38px;
+  padding-top: 20px;
 }
 
 .leopara-right-rail {
   grid-column: 3;
-  padding-top: 205px;
+  padding-top: 150px;
 }
 
 .brand-side-mascot {
+  position: relative;
+  z-index: 2;
   display: block;
-  width: min(100%, 165px);
+  width: min(100%, 142px);
   height: auto;
-  margin: 0 auto 20px;
+  margin: 0 auto 18px;
   pointer-events: none;
   user-select: none;
   filter: drop-shadow(0 14px 24px rgba(190, 50, 110, 0.1));
 }
 
 .leopara-rail-card {
+  position: relative;
+  z-index: 2;
   width: 100%;
-  padding: 18px;
+  padding: 16px;
   border: 1px solid rgba(202, 57, 113, 0.18);
-  border-radius: 16px;
-  background: rgba(255, 255, 255, 0.68);
-  box-shadow: 0 14px 32px rgba(111, 30, 63, 0.06);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.78);
+  box-shadow: 0 14px 32px rgba(111, 30, 63, 0.055);
   backdrop-filter: blur(10px);
 }
 
 .leopara-rail-card h2 {
   margin: 0 0 14px;
   color: var(--text);
-  font-size: 1rem;
+  font-size: 0.98rem;
   line-height: 1.25;
 }
 
 .leopara-step-list {
   display: grid;
-  gap: 14px;
+  gap: 13px;
 }
 
 .leopara-step {
   display: grid;
   grid-template-columns: auto 1fr;
-  gap: 10px;
+  gap: 9px;
   align-items: start;
 }
 
 .leopara-step > span {
   display: inline-grid;
-  width: 30px;
-  height: 30px;
+  width: 28px;
+  height: 28px;
   place-items: center;
   border-radius: 999px;
   border: 1px solid #f2cbd9;
   background: #fff0f5;
   color: #c73670;
-  font-size: 0.84rem;
+  font-size: 0.8rem;
   font-weight: 800;
 }
 
 .leopara-step strong {
   display: block;
   margin-bottom: 3px;
-  font-size: 0.95rem;
+  font-size: 0.9rem;
 }
 
 .leopara-step p,
 .leopara-chip-list span {
   margin: 0;
   color: var(--muted);
-  font-size: 0.9rem;
+  font-size: 0.86rem;
   line-height: 1.45;
 }
 
@@ -171,6 +180,58 @@ textarea {
   background: #fff0f5;
   color: #9d315b;
   font-weight: 650;
+}
+
+.leopara-side-visual {
+  position: relative;
+  width: 100%;
+  margin-top: 28px;
+  overflow: hidden;
+  aspect-ratio: 1.18;
+  border: 1px solid rgba(202, 57, 113, 0.14);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.66);
+  box-shadow: 0 16px 34px rgba(111, 30, 63, 0.055);
+}
+
+.leopara-side-visual img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+  opacity: 0.9;
+  pointer-events: none;
+  user-select: none;
+}
+
+.leopara-side-visual-left {
+  margin-top: 34px;
+}
+
+.leopara-side-visual-right {
+  position: absolute;
+  z-index: 3;
+  top: 344px;
+  right: -148px;
+  width: 260px;
+  margin-top: 0;
+  overflow: hidden;
+  aspect-ratio: 1.45;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  opacity: 0.82;
+  pointer-events: none;
+}
+
+.leopara-side-visual-left img {
+  object-position: 50% 50%;
+}
+
+.leopara-side-visual-right img {
+  object-position: 58% 48%;
+  filter: saturate(1.02) contrast(1.04);
 }
 
 .site-header {
@@ -344,6 +405,29 @@ textarea {
 .result-card,
 .empty-state {
   padding: 24px;
+}
+
+.branded-section-heading {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 16px;
+  align-items: start;
+}
+
+.form-card-bunny {
+  width: 74px;
+  height: 74px;
+  object-fit: cover;
+  border-radius: 999px;
+  border: 1px solid rgba(202, 57, 113, 0.18);
+  background: var(--surface-soft);
+  box-shadow: 0 10px 24px rgba(190, 50, 110, 0.08);
+  pointer-events: none;
+  user-select: none;
+}
+
+.form-card-bunny-job {
+  transform: scaleX(-1);
 }
 
 .section-heading {
@@ -762,8 +846,12 @@ textarea {
 @media (max-width: 1499px) {
   .leopara-page-shell {
     display: block;
-    width: min(1020px, calc(100% - 32px));
+    width: min(1080px, calc(100% - 32px));
     margin-top: 28px;
+  }
+
+  .leopara-page-shell::before {
+    display: none;
   }
 
   .leopara-side-rail {
@@ -772,6 +860,7 @@ textarea {
 
   .container {
     grid-column: auto;
+    grid-row: auto;
     width: 100%;
   }
 }
@@ -799,6 +888,11 @@ textarea {
 
   .button {
     width: 100%;
+  }
+
+  .form-card-bunny {
+    width: 58px;
+    height: 58px;
   }
 }
 

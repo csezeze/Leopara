@@ -37,7 +37,42 @@ Detay: [takım rolleri](docs/team_roles.md)
 
 ## Ürün görseli
 
-![LEOPARA ürün ekranı](docs/assets/product_screenshot_sprint1.png)
+<table>
+  <tr>
+    <td width="33%">
+      <img src="docs/assets/readme/leopara-ana-ekran.png" alt="LEOPARA ana ekran" />
+      <br />
+      <sub>Ana ekran ve ürün yerleşimi</sub>
+    </td>
+    <td width="33%">
+      <img src="docs/assets/readme/leopara-cv-ilan-giris.png" alt="CV ve ilan giriş alanları" />
+      <br />
+      <sub>CV ve ilan giriş alanları</sub>
+    </td>
+    <td width="33%">
+      <img src="docs/assets/readme/leopara-ornek-senaryo.png" alt="Örnek senaryo ekranı" />
+      <br />
+      <sub>Örnek senaryo görünümü</sub>
+    </td>
+  </tr>
+  <tr>
+    <td width="33%">
+      <img src="docs/assets/readme/leopara-genis-ekran.png" alt="Geniş ekran arayüz" />
+      <br />
+      <sub>Geniş ekran arayüz</sub>
+    </td>
+    <td width="33%">
+      <img src="docs/assets/readme/leopara-sonuc-uyumsuz.png" alt="Uyumsuz başvuru analiz sonucu" />
+      <br />
+      <sub>Uyumsuz başvuru analizi</sub>
+    </td>
+    <td width="33%">
+      <img src="docs/assets/readme/leopara-sonuc-kismi-uyum.png" alt="Kısmi uyum analiz sonucu" />
+      <br />
+      <sub>Kısmi uyum analizi</sub>
+    </td>
+  </tr>
+</table>
 
 Sprint 2 teslim panosu: [SVG görsel](docs/assets/sprint2_board_snapshot.svg). Görseller, ürünün ve sprint çıktılarının repo içinde incelenebilmesi için eklenmiştir.
 

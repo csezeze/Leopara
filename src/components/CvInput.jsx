@@ -13,10 +13,21 @@ function CvInput({
   onMatch,
 }) {
   return (
-    <section className="card input-card">
-      <div className="section-heading">
-        <h2>CV Giriş Alanı</h2>
-        <p>CV metnini ekle, istersen dosya alanını kullan ve ardından başvuru analizini başlat.</p>
+    <section className="card input-card branded-form-card">
+      <div className="section-heading branded-section-heading">
+        <div>
+          <h2>CV Giriş Alanı</h2>
+          <p>CV metnini ekle, istersen dosya alanını kullan ve ardından başvuru analizini başlat.</p>
+        </div>
+        <img
+          className="form-card-bunny"
+          src="/brand/leopara-form-bunny.png"
+          alt=""
+          width="88"
+          height="129"
+          aria-hidden="true"
+          draggable={false}
+        />
       </div>
 
       <div className="field-stack">
@@ -49,7 +60,7 @@ function CvInput({
             <p className="helper-text">Dosya okunuyor, metin hazırlanıyor...</p>
           ) : null}
           {!isFileProcessing && fileReadSuccess ? (
-            <p className="file-success-text">✓ Dosya okundu: {selectedFileName}</p>
+            <p className="file-success-text">Dosya okundu: {selectedFileName}</p>
           ) : null}
         </div>
 
@@ -77,4 +88,3 @@ function CvInput({
 }
 
 export default CvInput;
-
