@@ -1,15 +1,15 @@
 const features = [
   {
-    title: "Kanıt Tabanlı Eşleşme",
-    description: "Her ilan gereksinimi için CV'de hangi kanıtın bulunduğunu gör.",
+    title: "Uyum Skoru",
+    description: "CV'niz ile ilan beklentilerini karşılaştırır, güçlü ve eksik alanları anlaşılır skorlarla gösterir.",
   },
   {
-    title: "Staj Modu",
-    description: "Ders, proje, sertifika ve portfolyo sinyallerini staj adayları için ayrı değerlendir.",
+    title: "Kanıtlı Değerlendirme",
+    description: "Her gereksinim için CV'nizde bulunan somut ifadeleri ayrı ayrı listeler.",
   },
   {
-    title: "Başvuru Koçluğu",
-    description: "Eksikler için mini proje, etik CV önerisi ve mülakat soruları al.",
+    title: "Başvuru Rehberi",
+    description: "Eksik beceriler için etik CV önerileri, mini portfolyo fikri ve mülakat soruları sunar.",
   },
 ];
 
@@ -17,10 +17,10 @@ function Hero() {
   return (
     <section id="anasayfa" className="hero">
       <div className="hero-panel">
-        <span className="eyebrow">LEOPARA • Sprint 1 MVP</span>
-        <h1>Akıllı CV - İş ve Staj İlanı Eşleştirme</h1>
+        <span className="eyebrow">LEOPARA • Akıllı Kariyer Eşleştirme</span>
+        <h1>CV ve İlan Uyumu Tek Ekranda</h1>
         <p>
-          CV'ni ilan gereksinimleriyle karşılaştır, başvuruya ne kadar hazır olduğunu ve neyi geliştirmen gerektiğini gör.
+          LEOPARA, CV'nizi iş ve staj ilanlarıyla karşılaştırır; güçlü yönlerinizi, eksik becerilerinizi ve başvuru hazırlığınızı netleştirir.
         </p>
 
         <div id="ozellikler" className="feature-grid">
