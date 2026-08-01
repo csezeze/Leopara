@@ -1,11 +1,15 @@
 async function readPdfFile(file) {
   try {
     const pdfjs = await import("pdfjs-dist/legacy/build/pdf.mjs");
+    const { default: pdfjsWorkerUrl } = await import(
+      "pdfjs-dist/legacy/build/pdf.worker.mjs?url"
+    );
+    pdfjs.GlobalWorkerOptions.workerSrc = pdfjsWorkerUrl;
+
     const arrayBuffer = await file.arrayBuffer();
 
     const loadingTask = pdfjs.getDocument({
       data: new Uint8Array(arrayBuffer),
-      disableWorker: true,
     });
 
     const pdfDocument = await loadingTask.promise;
