@@ -34,6 +34,7 @@ body {
   margin: 0;
   min-width: 320px;
   min-height: 100vh;
+  overflow-x: clip;
 }
 
 a {
@@ -52,19 +53,56 @@ textarea {
 }
 
 .page-shell {
+  position: relative;
   min-height: 100vh;
+  overflow-x: clip;
 }
 
 .container {
+  position: relative;
+  z-index: 2;
   width: min(1180px, calc(100% - 32px));
   margin: 0 auto;
   padding: 28px 0 56px;
 }
 
+.brand-side-mascots {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: clip;
+  pointer-events: none;
+  user-select: none;
+}
+
+.brand-side-mascot {
+  position: absolute;
+  height: auto;
+  pointer-events: none;
+  user-select: none;
+  filter: drop-shadow(0 14px 24px rgba(190, 50, 110, 0.1));
+  -webkit-mask-image: radial-gradient(circle at center, #000 58%, rgba(0, 0, 0, 0.72) 72%, transparent 100%);
+  mask-image: radial-gradient(circle at center, #000 58%, rgba(0, 0, 0, 0.72) 72%, transparent 100%);
+}
+
+.brand-side-mascot-left {
+  top: 175px;
+  left: max(18px, calc(50% - 720px));
+  width: clamp(170px, 13vw, 230px);
+  opacity: 0.88;
+}
+
+.brand-side-mascot-right {
+  top: 445px;
+  right: max(18px, calc(50% - 720px));
+  width: clamp(185px, 14vw, 255px);
+  opacity: 0.92;
+}
+
 .site-header {
   position: sticky;
   top: 0;
-  z-index: 10;
+  z-index: 20;
   background: rgba(255, 248, 251, 0.9);
   border-bottom: 1px solid var(--border);
   backdrop-filter: blur(16px);
@@ -83,24 +121,29 @@ textarea {
 .brand {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
 }
 
 .brand-mark {
-  width: 42px;
-  height: 42px;
-  display: grid;
-  place-items: center;
-  border-radius: 8px;
-  color: #ffffff;
-  font-weight: 700;
-  background: var(--primary);
-  box-shadow: 0 10px 24px rgba(182, 65, 105, 0.22);
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+  object-fit: cover;
+  border-radius: 50%;
+  box-shadow: 0 10px 24px rgba(182, 65, 105, 0.14);
 }
 
 .brand-copy strong {
   display: block;
   font-size: 1rem;
+  font-weight: 750;
+  letter-spacing: -0.02em;
+}
+
+.brand-copy span {
+  display: block;
+  font-size: 0.74rem;
+  line-height: 1.2;
 }
 
 .brand-copy span,
@@ -138,6 +181,8 @@ textarea {
 .card,
 .result-card,
 .empty-state {
+  position: relative;
+  z-index: 2;
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: 8px;
@@ -609,6 +654,24 @@ textarea {
   }
 
   .site-nav {
+    display: none;
+  }
+}
+
+@media (max-width: 1499px) and (min-width: 1280px) {
+  .brand-side-mascot-left {
+    width: min(12vw, 185px);
+    opacity: 0.7;
+  }
+
+  .brand-side-mascot-right {
+    width: min(13vw, 200px);
+    opacity: 0.72;
+  }
+}
+
+@media (max-width: 1279px) {
+  .brand-side-mascots {
     display: none;
   }
 }

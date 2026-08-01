@@ -3,9 +3,16 @@ function Header() {
     <header className="site-header">
       <div className="header-inner">
         <div className="brand">
-          <div className="brand-mark">CV</div>
+          <img
+            className="brand-mark"
+            src="/brand/leopara-logo-round.png"
+            alt=""
+            width="40"
+            height="40"
+            draggable={false}
+          />
           <div className="brand-copy">
-            <strong>CareerMatch AI</strong>
+            <strong>LEOPARA</strong>
             <span>Akıllı CV Eşleştirme</span>
           </div>
         </div>
@@ -27,4 +34,3 @@ function Header() {
 }
 
 export default Header;
-

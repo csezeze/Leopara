@@ -1,6 +1,6 @@
-# Akıllı CV – İş İlanı Eşleştirme (CareerMatch AI)
+# LEOPARA - Akıllı CV ve İlan Eşleştirme
 
-CareerMatch AI, adayın CV'sindeki beceri ve kanıtları iş veya staj ilanının gereksinimleriyle karşılaştıran, anlaşılır bir başvuru hazırlık desteği MVP'sidir. Amaç yalnızca bir yüzde üretmek değil; adayın hangi becerilerinin örtüştüğünü, neleri geliştirebileceğini ve CV'sini etik biçimde nasıl güçlendirebileceğini görünür kılmaktır.
+LEOPARA, adayın CV'sindeki beceri ve kanıtları iş veya staj ilanının gereksinimleriyle karşılaştıran, anlaşılır bir başvuru hazırlık desteği MVP'sidir. Amaç yalnızca bir yüzde üretmek değil; adayın hangi becerilerinin örtüştüğünü, neleri geliştirebileceğini ve CV'sini etik biçimde nasıl güçlendirebileceğini görünür kılmaktır.
 
 ## Takım
 
@@ -37,7 +37,7 @@ Detay: [takım rolleri](docs/team_roles.md)
 
 ## Ürün görseli
 
-![CareerMatch AI ürün ekranı](docs/assets/product_screenshot_sprint1.png)
+![LEOPARA ürün ekranı](docs/assets/product_screenshot_sprint1.png)
 
 Sprint 2 teslim panosu: [SVG görsel](docs/assets/sprint2_board_snapshot.svg). Görseller, ürünün ve sprint çıktılarının repo içinde incelenebilmesi için eklenmiştir.
 

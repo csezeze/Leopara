@@ -17,9 +17,11 @@ function Hero() {
   return (
     <section id="anasayfa" className="hero">
       <div className="hero-panel">
-        <span className="eyebrow">Yapay zeka destekli kariyer koçu</span>
+        <span className="eyebrow">LEOPARA • Sprint 1 MVP</span>
         <h1>Akıllı CV - İş ve Staj İlanı Eşleştirme</h1>
-        <p>CV'ni ilan gereksinimleriyle karşılaştır, başvuruya ne kadar hazır olduğunu ve neyi geliştirmen gerektiğini gör.</p>
+        <p>
+          CV'ni ilan gereksinimleriyle karşılaştır, başvuruya ne kadar hazır olduğunu ve neyi geliştirmen gerektiğini gör.
+        </p>
 
         <div id="ozellikler" className="feature-grid">
           {features.map((feature) => (

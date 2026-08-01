@@ -5,6 +5,7 @@ import CvInput from "./components/CvInput";
 import JobList from "./components/JobList";
 import ResultsSection from "./components/ResultsSection";
 import EmptyState from "./components/EmptyState";
+import BrandSideMascots from "./components/BrandSideMascots";
 import { mockJobs } from "./data/mockJobs";
 import { analyzeApplication } from "./services/api";
 import { parseCvFile } from "./services/fileParser";
@@ -126,6 +127,7 @@ function App() {
 
   return (
     <div className="page-shell">
+      <BrandSideMascots />
       <Header />
 
       <main className="container">
