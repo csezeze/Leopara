@@ -63,6 +63,42 @@ const cvContextKeywords = [
   "calistim",
 ];
 
+const skillEvidenceKeywords = [
+  "proje",
+  "project",
+  "gelistirdim",
+  "gelistirildi",
+  "kullandim",
+  "kullanildi",
+  "calistim",
+  "deneyim",
+  "experience",
+  "staj",
+  "internship",
+  "sertifika",
+  "certificate",
+  "ders",
+  "course",
+  "egitim",
+  "training",
+  "github",
+  "gitlab",
+  "repo",
+  "portfolio",
+  "portfolyo",
+  "uygulama",
+  "application",
+  "api",
+  "model",
+  "analiz",
+  "analysis",
+  "test",
+  "deploy",
+  "deployment",
+  "tasarladim",
+  "yonettim",
+];
+
 function normalizeText(text) {
   return text
     .toLocaleLowerCase("tr")
@@ -139,13 +175,32 @@ function findEvidence(text, skill) {
   ) || null;
 }
 
+function getEvidenceWeight(text, skill) {
+  const evidence = findEvidence(text, skill);
+
+  if (!evidence) {
+    return 0;
+  }
+
+  const normalizedEvidence = normalizeText(evidence);
+  const hasStrongEvidence = skillEvidenceKeywords.some((keyword) =>
+    keywordExists(normalizedEvidence, keyword),
+  );
+
+  return hasStrongEvidence ? 1 : 0.35;
+}
+
 function buildFallbackAnalysis(payload) {
   const cvSkills = findSkills(payload.cv_text);
   const requirements = findSkills(payload.posting_text);
   const matchedSkills = requirements.filter((skill) => cvSkills.includes(skill));
   const missingSkills = requirements.filter((skill) => !cvSkills.includes(skill));
+  const matchedWeight = matchedSkills.reduce(
+    (total, skill) => total + getEvidenceWeight(payload.cv_text, skill),
+    0,
+  );
   const matchScore = requirements.length
-    ? Math.round((matchedSkills.length / requirements.length) * 100)
+    ? Math.round((matchedWeight / requirements.length) * 100)
     : 0;
   const normalizedCv = normalizeText(payload.cv_text);
   const hasProject = /(^|[^a-z0-9])(proje|project)(?=$|[^a-z0-9])/.test(normalizedCv);

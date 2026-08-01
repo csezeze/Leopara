@@ -2,14 +2,17 @@ def match_cv_to_posting(cv_profile: dict, posting_analysis: dict) -> dict:
     requirements = posting_analysis["requirements"]
     cv_skills = set(cv_profile["skills"])
     evidence_by_skill = cv_profile["evidence_by_skill"]
+    evidence_weight_by_skill = cv_profile.get("evidence_weight_by_skill", {})
 
     evidence_table = []
     matched_skills = []
     missing_skills = []
+    matched_weight = 0.0
 
     for requirement in requirements:
         if requirement in cv_skills:
             matched_skills.append(requirement)
+            matched_weight += evidence_weight_by_skill.get(requirement, 0.35)
             evidence_table.append({
                 "requirement": requirement,
                 "status": "matched",
@@ -23,7 +26,7 @@ def match_cv_to_posting(cv_profile: dict, posting_analysis: dict) -> dict:
                 "evidence": None,
             })
 
-    match_score = calculate_match_score(len(matched_skills), len(requirements))
+    match_score = calculate_match_score(matched_weight, len(requirements))
 
     return {
         "match_score": match_score,
@@ -33,8 +36,7 @@ def match_cv_to_posting(cv_profile: dict, posting_analysis: dict) -> dict:
     }
 
 
-def calculate_match_score(matched_count: int, requirement_count: int) -> int:
+def calculate_match_score(matched_weight: float, requirement_count: int) -> int:
     if requirement_count == 0:
         return 0
-    return round((matched_count / requirement_count) * 100)
-
+    return round((matched_weight / requirement_count) * 100)

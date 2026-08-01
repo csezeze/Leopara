@@ -69,6 +69,38 @@ class AnalyzeApiTests(unittest.TestCase):
         self.assertEqual(context.exception.status_code, 422)
         self.assertIn("geçerli bir CV gibi görünmüyor", context.exception.detail)
 
+    def test_listed_skills_score_lower_than_evidence_backed_skills(self) -> None:
+        posting_text = "Python, Git, Machine Learning ve NLP bilen stajyer aday ariyoruz."
+
+        listed_payload = analyze(
+            AnalyzeRequest(
+                cv_text=(
+                    "Gebze Teknik Universitesi Bilgisayar Muhendisligi ogrencisiyim. "
+                    "Teknik beceriler: Python, Git, Machine Learning, NLP."
+                ),
+                posting_text=posting_text,
+                application_type="internship",
+            )
+        ).model_dump()
+
+        evidence_backed_payload = analyze(
+            AnalyzeRequest(
+                cv_text=(
+                    "Gebze Teknik Universitesi Bilgisayar Muhendisligi ogrencisiyim. "
+                    "Python ile Machine Learning projesi gelistirdim. "
+                    "NLP modelini egittim ve GitHub uzerinde yayinladim."
+                ),
+                posting_text=posting_text,
+                application_type="internship",
+            )
+        ).model_dump()
+
+        self.assertLess(listed_payload["match_score"], 70)
+        self.assertGreater(
+            evidence_backed_payload["match_score"],
+            listed_payload["match_score"],
+        )
+
     def test_real_ml_abbreviation_still_matches(self) -> None:
         skills = find_skills("Python ile ML modeli eğittim ve sonuçları değerlendirdim.")
 
