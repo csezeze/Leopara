@@ -56,6 +56,19 @@ class AnalyzeApiTests(unittest.TestCase):
         self.assertEqual(context.exception.status_code, 422)
         self.assertIn("ortak bir beceri bulunamadı", context.exception.detail)
 
+    def test_keyword_list_is_not_accepted_as_cv(self) -> None:
+        with self.assertRaises(HTTPException) as context:
+            analyze(
+                AnalyzeRequest(
+                    cv_text="Python Git Machine Learning NLP FastAPI React PostgreSQL REST API Docker SQL",
+                    posting_text="Python, Git, Machine Learning ve NLP bilen stajyer aday arıyoruz.",
+                    application_type="internship",
+                )
+            )
+
+        self.assertEqual(context.exception.status_code, 422)
+        self.assertIn("geçerli bir CV gibi görünmüyor", context.exception.detail)
+
     def test_real_ml_abbreviation_still_matches(self) -> None:
         skills = find_skills("Python ile ML modeli eğittim ve sonuçları değerlendirdim.")
 

@@ -30,6 +30,39 @@ const skillKeywords = {
   "Problem Solving": ["problem solving", "problem çözme", "problem cozme"],
 };
 
+const cvContextKeywords = [
+  "üniversite",
+  "university",
+  "lise",
+  "okul",
+  "bölüm",
+  "bolum",
+  "mühendisliği",
+  "muhendisligi",
+  "öğrenci",
+  "ogrenci",
+  "eğitim",
+  "egitim",
+  "deneyim",
+  "experience",
+  "proje",
+  "project",
+  "staj",
+  "internship",
+  "sertifika",
+  "certificate",
+  "github",
+  "linkedin",
+  "portfolio",
+  "portfolyo",
+  "geliştirdim",
+  "gelistirdim",
+  "kullandım",
+  "kullandim",
+  "çalıştım",
+  "calistim",
+];
+
 function normalizeText(text) {
   return text
     .toLocaleLowerCase("tr")
@@ -64,6 +97,17 @@ function findSkills(text) {
     .map(([skill]) => skill);
 }
 
+function isValidCvText(text) {
+  const normalized = normalizeText(text);
+  const words = normalized.match(/[a-z0-9]+/g) || [];
+
+  if (words.length < 12) {
+    return false;
+  }
+
+  return cvContextKeywords.some((keyword) => keywordExists(normalized, keyword));
+}
+
 function validateAnalysisPayload(payload) {
   const cvSkills = findSkills(payload.cv_text);
   const requirements = findSkills(payload.posting_text);
@@ -71,6 +115,12 @@ function validateAnalysisPayload(payload) {
 
   if (!requirements.length) {
     throw new Error("İlan metninde analiz edilebilir bir gereksinim bulunamadı. Lütfen daha net bir ilan metni girin.");
+  }
+
+  if (!isValidCvText(payload.cv_text)) {
+    throw new Error(
+      "Yüklenen metin geçerli bir CV gibi görünmüyor. Lütfen eğitim, proje, deneyim, iletişim veya portfolyo bilgisi içeren bir CV yükleyin.",
+    );
   }
 
   if (!matchedSkills.length) {

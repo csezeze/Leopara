@@ -54,6 +54,15 @@ def analyze(request: AnalyzeRequest) -> AnalyzeResponse:
     posting_analysis = analyze_posting(request.posting_text)
     match_result = match_cv_to_posting(cv_profile, posting_analysis)
 
+    if not cv_profile["is_valid_cv"]:
+        raise HTTPException(
+            status_code=422,
+            detail=(
+                "Yüklenen metin geçerli bir CV gibi görünmüyor. "
+                "Lütfen eğitim, proje, deneyim, iletişim veya portfolyo bilgisi içeren bir CV yükleyin."
+            ),
+        )
+
     if not posting_analysis["requirements"]:
         raise HTTPException(
             status_code=422,
