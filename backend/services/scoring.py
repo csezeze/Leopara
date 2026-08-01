@@ -34,35 +34,35 @@ def build_score_explanation(
     application_type: str,
 ) -> str:
     if match_score >= 75:
-        match_summary = "CV'niz ilandaki gereksinimlerle guclu bir uyum gosteriyor."
+        match_summary = "CV'niz ilandaki gereksinimlerle güçlü bir uyum gösteriyor."
     elif match_score >= 50:
-        match_summary = "CV'niz ilandaki gereksinimlerle orta seviyede uyum gosteriyor."
+        match_summary = "CV'niz ilandaki gereksinimlerle orta seviyede uyum gösteriyor."
     else:
-        match_summary = "CV'niz ilandaki gereksinimlerle sinirli seviyede uyum gosteriyor."
+        match_summary = "CV'niz ilandaki gereksinimlerle sınırlı seviyede uyum gösteriyor."
 
     readiness_gap = readiness_score - match_score
     if readiness_gap >= 10:
-        readiness_summary = "Proje, portfolyo veya ek kanitlar hazirlik skorunu yukari tasiyor."
+        readiness_summary = "Proje, portfolyo veya ek kanıtlar hazırlık skorunu yukarı taşıyor."
     elif readiness_gap <= -10:
-        readiness_summary = "Eksik beceriler ve kanit zayifligi basvuru hazirligini dusuruyor."
+        readiness_summary = "Eksik beceriler ve kanıt zayıflığı başvuru hazırlığını düşürüyor."
     else:
-        readiness_summary = "Hazirlik skoru mevcut eslesme duzeyiyle genel olarak paralel."
+        readiness_summary = "Hazırlık skoru mevcut eşleşme düzeyiyle genel olarak paralel."
 
     matched_fragment = (
-        f"One cikan eslesen beceriler: {', '.join(matched_skills[:3])}."
+        f"Öne çıkan eşleşen beceriler: {', '.join(matched_skills[:3])}."
         if matched_skills
-        else "Henuz one cikan eslesen bir beceri tespit edilmedi."
+        else "Henüz öne çıkan eşleşen bir beceri tespit edilmedi."
     )
     missing_fragment = (
-        f"Gelistirilmesi gereken alanlar: {', '.join(missing_skills[:3])}."
+        f"Geliştirilmesi gereken alanlar: {', '.join(missing_skills[:3])}."
         if missing_skills
-        else "Belirgin bir eksik beceri gorunmuyor."
+        else "Belirgin bir eksik beceri görünmüyor."
     )
 
     mode_fragment = (
-        "Staj modu icin ders, proje ve portfolyo kanitlari ayrica dikkate alindi."
+        "Staj modu için ders, proje ve portfolyo kanıtları ayrıca dikkate alındı."
         if application_type == "internship"
-        else "Is modu icin teknik gereksinimlerin dogrudan karsilanma duzeyi dikkate alindi."
+        else "İş modu için teknik gereksinimlerin doğrudan karşılanma düzeyi dikkate alındı."
     )
 
     return " ".join(

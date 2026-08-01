@@ -70,12 +70,12 @@ function buildFallbackAnalysis(payload) {
     readiness_score: readinessScore,
     score_explanation:
       matchedSkills.length || missingSkills.length
-        ? `CV metni ile ilan gereksinimleri karsilastirildi. Eslesen alanlar: ${
-            matchedSkills.slice(0, 3).join(", ") || "belirgin eslesme yok"
-          }. Gelistirilmesi gereken alanlar: ${
+        ? `CV metni ile ilan gereksinimleri karşılaştırıldı. Eşleşen alanlar: ${
+            matchedSkills.slice(0, 3).join(", ") || "belirgin eşleşme yok"
+          }. Geliştirilmesi gereken alanlar: ${
             missingSkills.slice(0, 3).join(", ") || "belirgin eksik yok"
           }.`
-        : "Skorlar mevcut metinlere gore olusturuldu.",
+        : "Skorlar mevcut metinlere göre oluşturuldu.",
     matched_skills: matchedSkills,
     missing_skills: missingSkills,
     evidence_table: requirements.map((requirement) => ({
