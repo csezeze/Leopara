@@ -22,6 +22,14 @@ function CvInput({
       </div>
 
       <div className="field-stack">
+        <div className="privacy-notice" role="note" aria-label="CV gizlilik bilgisi">
+          <strong>CV gizliliğiniz</strong>
+          <p>
+            CV içeriğiniz yalnızca bu analizi oluşturmak için işlenir ve kalıcı olarak saklanmaz.
+            Temizle düğmesi CV, ilan ve analiz sonucunu bu ekrandan kaldırır.
+          </p>
+        </div>
+
         <textarea
           className="textarea"
           value={cvText}
@@ -63,7 +71,7 @@ function CvInput({
           Örnek Senaryo Doldur
         </button>
         <button className="button button-tertiary" type="button" onClick={onClear}>
-          Temizle
+          Tümünü Temizle
         </button>
         <button
           className="button button-primary"

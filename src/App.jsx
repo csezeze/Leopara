@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import Header from "./components/Header";
 import Hero from "./components/Hero";
 import CvInput from "./components/CvInput";
@@ -27,6 +27,8 @@ function App() {
   const [fileInputKey, setFileInputKey] = useState(0);
   const [fileReadSuccess, setFileReadSuccess] = useState(false);
   const [isFallbackAnalysis, setIsFallbackAnalysis] = useState(false);
+  const fileOperationId = useRef(0);
+  const analysisOperationId = useRef(0);
 
   const handleFillSample = () => {
     setCvText(SAMPLE_CV);
@@ -37,6 +39,8 @@ function App() {
   };
 
   const handleClear = () => {
+    fileOperationId.current += 1;
+    analysisOperationId.current += 1;
     setCvText("");
     setPostingText("");
     setApplicationType("job");
@@ -48,9 +52,14 @@ function App() {
     setFileInputKey((currentValue) => currentValue + 1);
     setFileReadSuccess(false);
     setIsFallbackAnalysis(false);
+    setIsFileProcessing(false);
+    setIsLoading(false);
   };
 
   const handleFileChange = async (file) => {
+    const currentOperationId = fileOperationId.current + 1;
+    fileOperationId.current = currentOperationId;
+
     if (!file) {
       setSelectedFileName("");
       setFileReadSuccess(false);
@@ -65,13 +74,22 @@ function App() {
     try {
       const extractedText = await parseCvFile(file);
 
+      if (currentOperationId !== fileOperationId.current) {
+        return;
+      }
+
       setCvText(extractedText.trim());
       setFileReadSuccess(true);
     } catch (fileError) {
-      console.error(fileError);
+      if (currentOperationId !== fileOperationId.current) {
+        return;
+      }
+
       setError(fileError.message);
     } finally {
-      setIsFileProcessing(false);
+      if (currentOperationId === fileOperationId.current) {
+        setIsFileProcessing(false);
+      }
     }
   };
 
@@ -103,6 +121,8 @@ function App() {
 
     setError("");
     setIsLoading(true);
+    const currentOperationId = analysisOperationId.current + 1;
+    analysisOperationId.current = currentOperationId;
 
     try {
       const response = await analyzeApplication({
@@ -111,17 +131,26 @@ function App() {
         application_type: applicationType,
       });
 
+      if (currentOperationId !== analysisOperationId.current) {
+        return;
+      }
+
       setAnalysis(response);
       setIsFallbackAnalysis(Boolean(response.isFallback));
       setHasMatched(true);
     } catch (matchError) {
+      if (currentOperationId !== analysisOperationId.current) {
+        return;
+      }
+
       setError(matchError.message || "Analiz sırasında bir sorun oluştu.");
       setAnalysis(null);
       setIsFallbackAnalysis(false);
       setHasMatched(false);
-      console.error(matchError);
     } finally {
-      setIsLoading(false);
+      if (currentOperationId === analysisOperationId.current) {
+        setIsLoading(false);
+      }
     }
   };
 

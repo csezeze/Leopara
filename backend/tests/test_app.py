@@ -8,6 +8,21 @@ from services.skills import find_skills
 
 
 class AnalyzeApiTests(unittest.TestCase):
+    def test_analysis_does_not_log_cv_content(self) -> None:
+        cv_text = (
+            "Bilgisayar muhendisligi ogrencisiyim. "
+            "Python ile REST API projesi gelistirdim ve GitHub uzerinde yayinladim."
+        )
+
+        with self.assertNoLogs(level="INFO"):
+            analyze(
+                AnalyzeRequest(
+                    cv_text=cv_text,
+                    posting_text="Python ve REST API bilgisi olan junior developer ariyoruz.",
+                    application_type="job",
+                )
+            )
+
     def test_analyze_returns_score_explanation(self) -> None:
         payload = analyze(
             AnalyzeRequest(

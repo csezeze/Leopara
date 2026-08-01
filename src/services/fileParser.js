@@ -38,9 +38,7 @@ async function readPdfFile(file) {
     }
 
     return text;
-  } catch (error) {
-    console.error("PDF okuma hatası:", error);
-
+  } catch {
     throw new Error(
       "Bu PDF taranmış olabilir. Lütfen metin içeren farklı bir PDF deneyin veya CV metnini manuel girin."
     );
@@ -62,9 +60,7 @@ async function readDocxFile(file) {
     }
 
     return text;
-  } catch (error) {
-    console.error("DOCX okuma hatası:", error);
-
+  } catch {
     throw new Error(
       "Dosya okunamadı. Lütfen dosyayı kontrol edin veya CV metnini manuel girin."
     );
