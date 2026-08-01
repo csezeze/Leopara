@@ -120,8 +120,8 @@ export async function analyzeApplication(payload) {
   try {
     const response = await apiClient.post("/analyze", payload);
 
-    return response.data;
+    return { ...response.data, isFallback: false };
   } catch (error) {
-    return buildFallbackAnalysis(payload);
+    return { ...buildFallbackAnalysis(payload), isFallback: true };
   }
 }

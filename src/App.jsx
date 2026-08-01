@@ -111,10 +111,12 @@ function App() {
       });
 
       setAnalysis(response);
+      setIsFallbackAnalysis(Boolean(response.isFallback));
       setHasMatched(true);
     } catch (matchError) {
       setError("Analiz sırasında bir sorun oluştu.");
       setAnalysis(null);
+      setIsFallbackAnalysis(false);
       setHasMatched(false);
       console.error(matchError);
     } finally {
@@ -161,7 +163,11 @@ function App() {
         </section>
 
         {hasMatched ? (
-          <ResultsSection analysis={analysis} isLoading={isLoading} />
+          <ResultsSection
+            analysis={analysis}
+            isLoading={isLoading}
+            isFallback={isFallbackAnalysis}
+          />
         ) : (
           <EmptyState />
         )}
