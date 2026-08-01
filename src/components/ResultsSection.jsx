@@ -1,6 +1,6 @@
 import ResultCard from "./ResultCard";
 
-function ResultsSection({ analysis, isLoading }) {
+function ResultsSection({ analysis, isLoading, isFallback }) {
   return (
     <section className="results-section">
       <div className="section-heading">
@@ -11,6 +11,12 @@ function ResultsSection({ analysis, isLoading }) {
             : "Skorlar, kanıt tablosu, eksik beceriler ve öneriler aşağıda listelenir."}
         </p>
       </div>
+
+      {isFallback ? (
+        <div className="info-box">
+          Backend bağlantısı kurulamadığı için geçici analiz sonucu gösteriliyor.
+        </div>
+      ) : null}
 
       {analysis ? <ResultCard result={analysis} /> : null}
     </section>

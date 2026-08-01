@@ -24,6 +24,8 @@ function App() {
   const [hasMatched, setHasMatched] = useState(false);
   const [selectedFileName, setSelectedFileName] = useState("");
   const [fileInputKey, setFileInputKey] = useState(0);
+  const [fileReadSuccess, setFileReadSuccess] = useState(false);
+  const [isFallbackAnalysis, setIsFallbackAnalysis] = useState(false);
 
   const handleFillSample = () => {
     setCvText(SAMPLE_CV);
@@ -43,35 +45,30 @@ function App() {
     setHasMatched(false);
     setSelectedFileName("");
     setFileInputKey((currentValue) => currentValue + 1);
+    setFileReadSuccess(false);
+    setIsFallbackAnalysis(false);
   };
 
   const handleFileChange = async (file) => {
     if (!file) {
       setSelectedFileName("");
+      setFileReadSuccess(false);
       return;
     }
 
-    const fileName = file.name.toLowerCase();
-
     setSelectedFileName(file.name);
     setError("");
+    setFileReadSuccess(false);
     setIsFileProcessing(true);
 
     try {
       const extractedText = await parseCvFile(file);
 
-      if (!extractedText.trim()) {
-        throw new Error("Dosyadan metin çıkarılamadı");
-      }
-
       setCvText(extractedText.trim());
+      setFileReadSuccess(true);
     } catch (fileError) {
       console.error(fileError);
-      setError(
-        fileName.endsWith(".pdf")
-          ? "PDF dosyasından metin okunamadı. Bu PDF taranmış görsel içeriyor olabilir."
-          : "DOCX dosyası okunamadı. Lütfen dosyayı kontrol edin veya CV metnini manuel girin.",
-      );
+      setError(fileError.message);
     } finally {
       setIsFileProcessing(false);
     }
@@ -114,10 +111,12 @@ function App() {
       });
 
       setAnalysis(response);
+      setIsFallbackAnalysis(Boolean(response.isFallback));
       setHasMatched(true);
     } catch (matchError) {
       setError("Analiz sırasında bir sorun oluştu.");
       setAnalysis(null);
+      setIsFallbackAnalysis(false);
       setHasMatched(false);
       console.error(matchError);
     } finally {
@@ -141,6 +140,7 @@ function App() {
               isFileProcessing={isFileProcessing}
               fileInputKey={fileInputKey}
               selectedFileName={selectedFileName}
+              fileReadSuccess={fileReadSuccess}
               onChange={setCvText}
               onFileChange={handleFileChange}
               onClear={handleClear}
@@ -163,7 +163,11 @@ function App() {
         </section>
 
         {hasMatched ? (
-          <ResultsSection analysis={analysis} isLoading={isLoading} />
+          <ResultsSection
+            analysis={analysis}
+            isLoading={isLoading}
+            isFallback={isFallbackAnalysis}
+          />
         ) : (
           <EmptyState />
         )}

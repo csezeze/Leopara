@@ -5,6 +5,7 @@ function CvInput({
   isFileProcessing,
   fileInputKey,
   selectedFileName,
+  fileReadSuccess,
   onChange,
   onFileChange,
   onClear,
@@ -46,6 +47,9 @@ function CvInput({
           ) : null}
           {isFileProcessing ? (
             <p className="helper-text">Dosya okunuyor, metin hazırlanıyor...</p>
+          ) : null}
+          {!isFileProcessing && fileReadSuccess ? (
+            <p className="file-success-text">✓ Dosya okundu: {selectedFileName}</p>
           ) : null}
         </div>
 
