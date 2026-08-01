@@ -2,7 +2,7 @@ import axios from "axios";
 
 const apiClient = axios.create({
   baseURL: import.meta.env.VITE_API_URL || "http://127.0.0.1:8000",
-  timeout: 4000,
+  timeout: 9000,
 });
 
 const skillKeywords = {
