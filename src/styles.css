@@ -109,6 +109,68 @@ textarea {
   filter: drop-shadow(0 14px 24px rgba(190, 50, 110, 0.1));
 }
 
+.leopara-speech-bubble {
+  position: absolute;
+  z-index: 4;
+  top: 0;
+  left: 50%;
+  width: 230px;
+  margin: 0;
+  padding: 14px 16px;
+  border: 1px solid #ebc7d5;
+  border-radius: 18px;
+  background: #ffffff;
+  box-shadow: 0 12px 28px rgba(111, 30, 63, 0.06);
+  transform: translateX(-50%);
+}
+
+.leopara-speech-bubble p {
+  margin: 0;
+  color: var(--text);
+  font-size: 0.88rem;
+  font-weight: 600;
+  line-height: 1.5;
+}
+
+.leopara-thought-trail {
+  position: absolute;
+  bottom: -43px;
+  left: 50%;
+  width: 44px;
+  height: 40px;
+  pointer-events: none;
+}
+
+.leopara-thought-trail span {
+  position: absolute;
+  display: block;
+  border: 1px solid #ebc7d5;
+  border-radius: 50%;
+  background: #ffffff;
+  box-shadow: 0 5px 12px rgba(111, 30, 63, 0.05);
+}
+
+.leopara-thought-trail span:nth-child(1) {
+  top: 0;
+  left: 0;
+  width: 14px;
+  height: 14px;
+}
+
+.leopara-thought-trail span:nth-child(2) {
+  top: 15px;
+  left: 15px;
+  width: 10px;
+  height: 10px;
+}
+
+.leopara-thought-trail span:nth-child(3) {
+  top: 28px;
+  left: 28px;
+  width: 7px;
+  height: 7px;
+}
+
 .leopara-rail-card {
   position: relative;
   z-index: 2;
