@@ -7,7 +7,7 @@ LEOPARA, adayın CV'sindeki beceri ve kanıtları iş veya staj ilanının gerek
 | Üye | Rol | Sorumluluk |
 | --- | --- | --- |
 | Yusuf Şengöz | Product Owner | Ürün vizyonu, backlog, demo ve final teslim paketi |
-| Zeynep Özkan | Scrum Master | Sprint takibi, board, dokümantasyon ve süreç yönetimi |
+| Zeynep Özkan | Scrum Master & Teknik Destek | Sprint takibi, board, dokümantasyon, frontend canlıya alma süreci ve backend entegrasyon desteği |
 | Ceren Aydın | Backend & AI/NLP | FastAPI, eşleştirme, skor ve backend testleri |
 | Feyza Korkmaz | Frontend | React arayüzü, dosya yükleme ve sonuç ekranı |
 
