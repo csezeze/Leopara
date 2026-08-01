@@ -1,6 +1,28 @@
-# LEOPARA - Akıllı CV ve İlan Eşleştirme
+<p align="center">
+  <img src="public/brand/leopara-logo-round.png" alt="LEOPARA logo" width="96" />
+</p>
 
-LEOPARA, adayın CV'sindeki beceri ve kanıtları iş veya staj ilanının gereksinimleriyle karşılaştıran, anlaşılır bir başvuru hazırlık desteği MVP'sidir. Amaç yalnızca bir yüzde üretmek değil; adayın hangi becerilerinin örtüştüğünü, neleri geliştirebileceğini ve CV'sini etik biçimde nasıl güçlendirebileceğini görünür kılmaktır.
+<h1 align="center">LEOPARA</h1>
+
+<p align="center">
+  <strong>Akıllı CV ve İlan Eşleştirme</strong>
+</p>
+
+<p align="center">
+  CV'nizi iş veya staj ilanlarıyla karşılaştırır; eşleşen becerileri, eksik alanları, kanıtları ve başvuruya hazırlık önerilerini tek ekranda sunar.
+</p>
+
+<p align="center">
+  <a href="#çalışan-özellikler">Özellikler</a> ·
+  <a href="#ürün-ekranları">Ürün Ekranları</a> ·
+  <a href="#yerel-kurulum-ve-çalıştırma">Kurulum</a> ·
+  <a href="#test-ve-doğrulama">Test</a> ·
+  <a href="#teslim-dokümanları">Dokümanlar</a>
+</p>
+
+## Ürün özeti
+
+LEOPARA, adayın CV'sindeki beceri ve kanıtları iş veya staj ilanının gereksinimleriyle karşılaştıran çalışan bir başvuru hazırlık ürünüdür. Amaç yalnızca bir yüzde üretmek değil; adayın hangi becerilerinin örtüştüğünü, neleri geliştirebileceğini ve CV'sini etik biçimde nasıl güçlendirebileceğini görünür kılmaktır.
 
 ## Takım
 
@@ -15,7 +37,17 @@ Detay: [takım rolleri](docs/team_roles.md)
 
 ## Problem ve ürün değeri
 
-İş ve staj başvurularında adayların CV'leri ile ilandaki beklentiler arasındaki farkı hızlı ve somut biçimde görmekte zorlanması hedeflenir. Sistem CV ve ilan metninden tanımlı becerileri çıkarır; eşleşen ve eksik alanları karşılaştırır; ardından eşleşme ile başvuruya hazırlık skorlarını, kanıt tablosunu ve gelişim önerilerini sunar. Böylece kullanıcı başvuru öncesi kararını daha şeffaf bilgiyle verir.
+İş ve staj başvurularında adaylar, CV'leri ile ilandaki beklentiler arasındaki farkı çoğu zaman net göremez. LEOPARA bu süreci daha anlaşılır hale getirir: CV ve ilan metninden beceri sinyallerini çıkarır, eşleşen ve eksik alanları karşılaştırır, ardından skorları kanıt tablosu ve gelişim önerileriyle birlikte sunar.
+
+Bu sayede kullanıcı yalnızca “kaç puan aldığını” değil, skorun neden oluştuğunu ve başvuru öncesi hangi adımları güçlendirebileceğini görür.
+
+## Nasıl çalışır?
+
+| Adım | Açıklama |
+| --- | --- |
+| 1. CV'ni ekle | CV metnini yapıştır veya PDF/DOCX dosyası yükle. |
+| 2. İlanı seç | İş ya da staj ilanını hazır örneklerden seç veya kendi ilan metnini gir. |
+| 3. Analizi incele | Eşleşme skorunu, başvuruya hazırlık skorunu, kanıtları ve önerileri tek ekranda görüntüle. |
 
 ## Hedef kitle
 
@@ -24,7 +56,7 @@ Detay: [takım rolleri](docs/team_roles.md)
 - Kariyer değişikliği yapan adaylar
 - Aday-pozisyon uyumunu ön değerlendirmek isteyen İK ekipleri
 
-## MVP'de çalışan özellikler
+## Çalışan özellikler
 
 - CV metni girişi ve PDF/DOCX dosyasından metin çıkarma
 - İş veya staj ilanı metni girişi ile örnek veri seçimi
@@ -33,9 +65,10 @@ Detay: [takım rolleri](docs/team_roles.md)
 - Skor açıklaması, eşleşen/eksik beceriler ve kanıt tablosu
 - Staj moduna özel değerlendirme
 - Mini portfolyo projesi, etik CV geliştirme ve mülakat soruları
+- Uyumsuz CV ve ilan eşleşmelerinde analizi durduran uygunluk kontrolü
 - Backend erişilemediğinde demo akışını koruyan istemci tarafı analiz yedeği
 
-## Ürün görseli
+## Ürün ekranları
 
 <table>
   <tr>
@@ -74,7 +107,7 @@ Detay: [takım rolleri](docs/team_roles.md)
   </tr>
 </table>
 
-Sprint 2 teslim panosu: [SVG görsel](docs/assets/sprint2_board_snapshot.svg). Görseller, ürünün ve sprint çıktılarının repo içinde incelenebilmesi için eklenmiştir.
+Sprint 2 teslim panosu: [SVG görsel](docs/assets/sprint2_board_snapshot.svg). Ürün ekranları ve sprint çıktıları repo içinde incelenebilir şekilde eklenmiştir.
 
 ## Teknolojiler
 
@@ -143,13 +176,13 @@ Tekrarlanabilir iki ayrıntılı senaryo: [final demo senaryoları](sprint-3/dem
 - [Sprint 2 teslim özeti](sprint-2/README.md), [Sprint 2 planı](sprint-2/sprint_planning.md), [Sprint 2 ürün durumu](sprint-2/product_status.md), [Sprint 2 review](sprint-2/sprint_review.md), [Sprint 2 retrospective](sprint-2/sprint_retrospective.md)
 - [Final teslim özeti](sprint-3/README.md), [final ürün durumu](sprint-3/final_product_status.md), [final review](sprint-3/final_review.md), [final retrospective](sprint-3/final_retrospective.md), [final test sonuçları](sprint-3/final_test_results.md)
 
-## Test ve deployment durumu
+## Test ve doğrulama
 
 - Backend birim testleri: `cd backend && python3 -m unittest discover -s tests`
 - Frontend production build: `npm run build`
 - Son doğrulama sonuçları: [final test sonuçları](sprint-3/final_test_results.md)
-- Canlı production URL henüz tanımlanmadı. Deployment için önerilen kombinasyon Render (FastAPI) + Vercel (React) olup CORS ayarı ve platform hesapları gerekir: [deployment notu](docs/deployment-options.md)
+- Deployment planı ve ortam notları: [deployment notu](docs/deployment-options.md)
 
-## MVP sınırları ve sonraki adımlar
+## Teknik kapsam ve sonraki geliştirmeler
 
-Bu teslimde eşleştirme kural tabanlıdır; LLM/embedding tabanlı anlamsal eşleştirme yapılmamıştır. Taranmış PDF'ler için OCR, kullanıcı hesabı, analiz geçmişi ve PostgreSQL kalıcı veri katmanı MVP kapsamı dışındadır. Açık işler ve öncelikleri [ürün backlog](docs/product_backlog.md) içinde görünür tutulur.
+Bu sürümde eşleştirme açıklanabilir kural tabanlı beceri çıkarımıyla yapılır. Taranmış PDF'ler için OCR, kullanıcı hesabı, analiz geçmişi, PostgreSQL kalıcı veri katmanı ve LLM/embedding tabanlı anlamsal eşleştirme sonraki geliştirme alanlarıdır. Açık işler ve öncelikleri [ürün backlog](docs/product_backlog.md) içinde görünür tutulur.

@@ -17,7 +17,6 @@ function Hero() {
   return (
     <section id="anasayfa" className="hero">
       <div className="hero-panel">
-        <span className="eyebrow">LEOPARA • Akıllı Kariyer Eşleştirme</span>
         <h1>CV ve İlan Uyumu Tek Ekranda</h1>
         <p>
           LEOPARA, CV'nizi iş ve staj ilanlarıyla karşılaştırır; güçlü yönlerinizi, eksik becerilerinizi ve başvuru hazırlığınızı netleştirir.

@@ -1,7 +1,7 @@
 :root {
   font-family: "Segoe UI", "Helvetica Neue", sans-serif;
   color: #241f22;
-  background: #fff8fb;
+  background: #fbf8fa;
   line-height: 1.5;
   font-weight: 400;
   font-synthesis: none;
@@ -9,14 +9,14 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   --surface: #ffffff;
-  --surface-soft: #fff2f6;
+  --surface-soft: #f8eef3;
   --border: #efd5df;
   --text: #241f22;
   --muted: #65565e;
-  --primary: #b64169;
+  --primary: #a83d62;
   --secondary: #247b6c;
   --accent: #6f5a98;
-  --shadow: 0 18px 44px rgba(136, 75, 99, 0.1);
+  --shadow: 0 18px 44px rgba(70, 54, 63, 0.09);
   --high: #247b6c;
   --medium: #b7791f;
   --low: #b64169;
@@ -176,9 +176,9 @@ textarea {
 .leopara-chip-list span {
   padding: 7px 10px;
   border-radius: 999px;
-  border: 1px solid #f2cbd9;
-  background: #fff0f5;
-  color: #9d315b;
+  border: 1px solid #ead8df;
+  background: rgba(255, 255, 255, 0.86);
+  color: #82425c;
   font-weight: 650;
 }
 
@@ -246,7 +246,7 @@ textarea {
 .header-inner {
   width: min(1180px, calc(100% - 32px));
   margin: 0 auto;
-  padding: 14px 0;
+  padding: 16px 0;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -256,12 +256,12 @@ textarea {
 .brand {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
 }
 
 .brand-mark {
-  width: 40px;
-  height: 40px;
+  width: 52px;
+  height: 52px;
   flex-shrink: 0;
   object-fit: cover;
   border-radius: 50%;
@@ -270,14 +270,14 @@ textarea {
 
 .brand-copy strong {
   display: block;
-  font-size: 1rem;
+  font-size: 1.18rem;
   font-weight: 750;
   letter-spacing: -0.02em;
 }
 
 .brand-copy span {
   display: block;
-  font-size: 0.86rem;
+  font-size: 0.92rem;
   line-height: 1.2;
 }
 
@@ -325,7 +325,7 @@ textarea {
 }
 
 .hero-panel {
-  padding: 36px;
+  padding: 42px 36px 36px;
 }
 
 .eyebrow {
@@ -335,7 +335,7 @@ textarea {
   color: var(--primary);
   font-size: 0.92rem;
   font-weight: 700;
-  background: var(--surface-soft);
+  background: #f6eef2;
   margin-bottom: 16px;
 }
 
@@ -373,7 +373,7 @@ textarea {
 .feature-card {
   padding: 20px;
   border-radius: 8px;
-  background: #fffafb;
+  background: #ffffff;
   border: 1px solid var(--border);
 }
 
@@ -408,10 +408,7 @@ textarea {
 }
 
 .branded-section-heading {
-  display: grid;
-  grid-template-columns: 1fr auto;
-  gap: 16px;
-  align-items: start;
+  display: block;
 }
 
 .form-card-bunny {
@@ -488,8 +485,8 @@ textarea {
 .file-dropzone {
   padding: 16px;
   border-radius: 8px;
-  border: 1px dashed #d9aebe;
-  background: var(--surface-soft);
+  border: 1px dashed #d8c1ca;
+  background: #fffafb;
 }
 
 .file-dropzone strong {
@@ -558,7 +555,7 @@ textarea {
 }
 
 .button-secondary {
-  background: var(--surface-soft);
+  background: #f7eef2;
   color: var(--primary);
 }
 
@@ -574,7 +571,7 @@ textarea {
   gap: 8px;
   padding: 6px;
   border-radius: 8px;
-  background: var(--surface-soft);
+  background: #f7eef2;
 }
 
 .mode-toggle button {
@@ -650,8 +647,9 @@ textarea {
 .tag {
   padding: 7px 10px;
   border-radius: 999px;
-  background: var(--surface-soft);
-  color: var(--primary);
+  border: 1px solid #ead8df;
+  background: #ffffff;
+  color: #8a405f;
   font-size: 0.86rem;
   font-weight: 600;
 }
@@ -694,19 +692,23 @@ textarea {
 .score-panel {
   padding: 16px;
   border-radius: 8px;
-  color: #ffffff;
+  border: 1px solid var(--border);
+  border-left: 5px solid var(--score-color, var(--primary));
+  background: #ffffff;
+  color: var(--text);
 }
 
 .score-panel span {
   display: block;
   font-weight: 700;
-  opacity: 0.9;
+  color: var(--muted);
 }
 
 .score-panel strong {
   display: block;
   margin-top: 8px;
   font-size: 2rem;
+  color: var(--score-color, var(--primary));
 }
 
 .score-pill {
@@ -718,15 +720,30 @@ textarea {
   font-weight: 700;
 }
 
-.score-high {
+.score-panel.score-high {
+  --score-color: var(--high);
+}
+
+.score-panel.score-medium {
+  --score-color: var(--medium);
+}
+
+.score-panel.score-low {
+  --score-color: var(--low);
+}
+
+.progress-bar.score-high,
+.score-pill.score-high {
   background: var(--high);
 }
 
-.score-medium {
+.progress-bar.score-medium,
+.score-pill.score-medium {
   background: var(--medium);
 }
 
-.score-low {
+.progress-bar.score-low,
+.score-pill.score-low {
   background: var(--low);
 }
 

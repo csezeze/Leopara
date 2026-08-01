@@ -19,15 +19,6 @@ function CvInput({
           <h2>CV Giriş Alanı</h2>
           <p>CV metnini ekle, istersen dosya alanını kullan ve ardından başvuru analizini başlat.</p>
         </div>
-        <img
-          className="form-card-bunny"
-          src="/brand/leopara-form-bunny.png"
-          alt=""
-          width="88"
-          height="129"
-          aria-hidden="true"
-          draggable={false}
-        />
       </div>
 
       <div className="field-stack">

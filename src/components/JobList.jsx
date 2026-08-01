@@ -14,15 +14,6 @@ function JobList({
           <h2>İlan ve Başvuru Modu</h2>
           <p>İlan metnini yapıştır, modu seç veya hazır örneklerden birini kullan.</p>
         </div>
-        <img
-          className="form-card-bunny form-card-bunny-job"
-          src="/brand/leopara-form-bunny.png"
-          alt=""
-          width="88"
-          height="129"
-          aria-hidden="true"
-          draggable={false}
-        />
       </div>
 
       <div className="mode-toggle" aria-label="Başvuru modu">
