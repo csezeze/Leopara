@@ -7,8 +7,9 @@
 - Backlog ve user story takibi
 - Kabul kriterleri
 - Demo/pitch anlatımı
+- Demo akışı ve ürün değerinin anlatımı
 
-## Zeynep Özkan - Scrum Master
+## Zeynep Özkan - Scrum Master ve Teknik Destek
 
 - Sprint planlama ve günlük scrum kayıtları
 - Sprint board güncellemeleri
@@ -17,6 +18,8 @@
 - Bloker takibi
 - Akademi ekibi ve asistanlarla iletişim sorumluluğu
 - Final teslim süreci için takım içi bilgi ve kanıtların toparlanması
+- Final test paketinin hazırlanması ve doğrulama sonuçlarının takip edilmesi
+- Frontend canlıya alma süreci ve backend entegrasyon kontrolleri
 
 ## Ceren Aydın - Backend ve AI/NLP
 

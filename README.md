@@ -26,15 +26,13 @@
 LEOPARA, adayın CV'sindeki beceri ve kanıtları iş veya staj ilanının gereksinimleriyle karşılaştıran çalışan bir başvuru hazırlık ürünüdür. Amaç yalnızca bir yüzde üretmek değil; adayın hangi becerilerinin örtüştüğünü, neleri geliştirebileceğini ve CV'sini etik biçimde nasıl güçlendirebileceğini görünür kılmaktır.
 
 - Canlı frontend: [https://leopara.vercel.app](https://leopara.vercel.app)
-- Canlı backend API: [https://lepora-api.onrender.com](https://lepora-api.onrender.com)
-- Sağlık kontrolü: [https://lepora-api.onrender.com/health](https://lepora-api.onrender.com/health)
 
 ## Takım
 
 | Üye | Rol | Sorumluluk |
 | --- | --- | --- |
-| Yusuf Şengöz | Product Owner | Ürün vizyonu, backlog, demo ve final teslim paketi |
-| Zeynep Özkan | Scrum Master & Teknik Destek | Sprint takibi, board, dokümantasyon, frontend canlıya alma süreci ve backend entegrasyon desteği |
+| Yusuf Şengöz | Product Owner | Ürün vizyonu, backlog, kullanıcı hikayeleri ve demo akışı |
+| Zeynep Özkan | Scrum Master & Teknik Destek | Sprint takibi, board, dokümantasyon, final test paketi, frontend canlıya alma süreci ve backend entegrasyon desteği |
 | Ceren Aydın | Backend & AI/NLP | FastAPI, eşleştirme, skor ve backend testleri |
 | Feyza Korkmaz | Frontend | React arayüzü, dosya yükleme ve sonuç ekranı |
 
