@@ -25,7 +25,7 @@
 
 LEOPARA, adayın CV'sindeki beceri ve kanıtları iş veya staj ilanının gereksinimleriyle karşılaştıran çalışan bir başvuru hazırlık ürünüdür. Amaç yalnızca bir yüzde üretmek değil; adayın hangi becerilerinin örtüştüğünü, neleri geliştirebileceğini ve CV'sini etik biçimde nasıl güçlendirebileceğini görünür kılmaktır.
 
-- Canlı frontend: [https://leopara.vercel.app](https://leopara.vercel.app)
+- Canlı demo: [https://leopara.vercel.app](https://leopara.vercel.app)
 
 ## Takım
 
