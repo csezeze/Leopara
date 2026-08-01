@@ -81,8 +81,6 @@ textarea {
   pointer-events: none;
   user-select: none;
   filter: drop-shadow(0 14px 24px rgba(190, 50, 110, 0.1));
-  -webkit-mask-image: radial-gradient(circle at center, #000 58%, rgba(0, 0, 0, 0.72) 72%, transparent 100%);
-  mask-image: radial-gradient(circle at center, #000 58%, rgba(0, 0, 0, 0.72) 72%, transparent 100%);
 }
 
 .brand-side-mascot-left {
