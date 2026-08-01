@@ -72,12 +72,6 @@ function BrandSideMascots() {
           aria-hidden="true"
           draggable={false}
         />
-        <div className="leopara-speech-bubble" role="note">
-          <p>
-            Sevimli göründüğüme bakmayın; CV'nizi ilan gereksinimlerine göre kanıtlarıyla ve
-            titizlikle analiz ederim.
-          </p>
-        </div>
         <div className="leopara-rail-card">
           <h2>LEOPARA neyi inceler?</h2>
           <div className="leopara-chip-list">
