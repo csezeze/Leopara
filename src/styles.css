@@ -780,6 +780,26 @@ textarea {
   font-size: 0.92rem;
 }
 
+.analysis-warning {
+  padding: 14px 16px;
+  border: 1px solid #e7b7ad;
+  border-left: 4px solid var(--low);
+  border-radius: 6px;
+  background: #fff7f5;
+  color: #713c35;
+}
+
+.analysis-warning strong {
+  display: block;
+  margin-bottom: 5px;
+  color: #713c35;
+}
+
+.analysis-warning p {
+  margin: 0;
+  line-height: 1.55;
+}
+
 .result-card {
   display: grid;
   gap: 16px;

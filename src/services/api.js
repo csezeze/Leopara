@@ -79,8 +79,6 @@ const skillEvidenceKeywords = [
   "certificate",
   "ders",
   "course",
-  "egitim",
-  "training",
   "github",
   "gitlab",
   "repo",
@@ -97,6 +95,19 @@ const skillEvidenceKeywords = [
   "deployment",
   "tasarladim",
   "yonettim",
+];
+
+const softSkills = new Set(["Communication", "Teamwork", "Problem Solving"]);
+const softSkillEvidenceKeywords = [
+  "birlikte",
+  "is birligi",
+  "gorev",
+  "sorumluluk",
+  "koordine",
+  "yonettim",
+  "liderlik",
+  "sundum",
+  "cozdum",
 ];
 
 const negationMarkers = [
@@ -358,12 +369,7 @@ function isValidCvText(text) {
 }
 
 function validateAnalysisPayload(payload) {
-  const cvSkills = findCvSkills(payload.cv_text);
   const requirements = findSkills(payload.posting_text);
-  const matchedSkills = requirements.filter((skill) => cvSkills.includes(skill));
-  const evidenceBackedSkills = matchedSkills.filter(
-    (skill) => getEvidenceWeight(payload.cv_text, skill) >= 1,
-  );
 
   if (!requirements.length) {
     throw new Error("İlan metninde analiz edilebilir bir gereksinim bulunamadı. Lütfen daha net bir ilan metni girin.");
@@ -375,17 +381,6 @@ function validateAnalysisPayload(payload) {
     );
   }
 
-  if (!matchedSkills.length) {
-    throw new Error(
-      "Bu CV ile seçilen ilan arasında analiz edilebilir ortak bir beceri bulunamadı. Lütfen doğru CV ve ilan eşleşmesini kontrol edin.",
-    );
-  }
-
-  if (!evidenceBackedSkills.length) {
-    throw new Error(
-      "CV'de ilanla ortak görünen beceriler için somut bir kullanım kanıtı bulunamadı. Lütfen proje, ders, sertifika veya iş deneyimiyle desteklenen bir CV yükleyin.",
-    );
-  }
 }
 
 function findEvidence(text, skill) {
@@ -402,6 +397,13 @@ function getEvidenceWeight(text, skill) {
   }
 
   const normalizedEvidence = normalizeText(evidence);
+  if (
+    softSkills.has(skill)
+    && !softSkillEvidenceKeywords.some((keyword) => keywordExists(normalizedEvidence, keyword))
+  ) {
+    return 0;
+  }
+
   const hasStrongEvidence = skillEvidenceKeywords.some((keyword) =>
     keywordExists(normalizedEvidence, keyword),
   );
@@ -469,10 +471,15 @@ function buildFallbackAnalysis(payload) {
   const cvSkills = findCvSkills(payload.cv_text);
   const requirementDetails = buildRequirementDetails(payload.posting_text);
   const requirements = requirementDetails.map((detail) => detail.skill);
-  const matchedSkills = requirements.filter((skill) => cvSkills.includes(skill));
-  const missingSkills = requirements.filter((skill) => !cvSkills.includes(skill));
+  const matchedSkills = requirements.filter(
+    (skill) => cvSkills.includes(skill) && getEvidenceWeight(payload.cv_text, skill) > 0,
+  );
+  const evidenceBackedSkills = matchedSkills.filter(
+    (skill) => getEvidenceWeight(payload.cv_text, skill) >= 1,
+  );
+  const missingSkills = requirements.filter((skill) => !matchedSkills.includes(skill));
   const criticalMissingSkills = requirementDetails
-    .filter((detail) => detail.priority === "required" && !cvSkills.includes(detail.skill))
+    .filter((detail) => detail.priority === "required" && !matchedSkills.includes(detail.skill))
     .map((detail) => detail.skill);
   const matchedWeight = requirementDetails.reduce(
     (total, detail) => total + (
@@ -532,6 +539,15 @@ function buildFallbackAnalysis(payload) {
           otherMissingSummary,
         ].filter(Boolean).join(" ")
         : "İlanda sistemin tanıdığı teknik gereksinim bulunamadığı için skor 0 olarak hesaplandı.",
+    analysis_warnings: !matchedSkills.length
+      ? [
+        "CV geçerli bir belge olarak okundu; ancak ilandaki gereksinimlerle ortak bir beceri bulunamadı. Bu nedenle eşleşme skoru 0 olarak hesaplandı.",
+      ]
+      : !evidenceBackedSkills.length
+        ? [
+          "CV ile ilanda ortak beceri ifadeleri bulundu; ancak bu becerileri destekleyen proje, ders, sertifika veya somut kullanım kanıtı zayıf olduğu için skor sınırlı tutuldu.",
+        ]
+        : [],
     matched_skills: matchedSkills,
     missing_skills: missingSkills,
     critical_missing_skills: criticalMissingSkills,

@@ -21,6 +21,7 @@ function ResultCard({ result }) {
   const scoreClass = getScoreClass(result.match_score);
   const readinessClass = getScoreClass(result.readiness_score);
   const criticalMissingSkills = result.critical_missing_skills || [];
+  const analysisWarnings = result.analysis_warnings || [];
 
   return (
     <article className="result-card">
@@ -41,6 +42,15 @@ function ResultCard({ result }) {
           style={{ width: `${result.match_score}%` }}
         />
       </div>
+
+      {analysisWarnings.length ? (
+        <div className="analysis-warning" role="status">
+          <strong>Analiz Notu</strong>
+          {analysisWarnings.map((warning) => (
+            <p key={warning}>{warning}</p>
+          ))}
+        </div>
+      ) : null}
 
       <div className="result-block">
         <strong>Skor Açıklaması</strong>

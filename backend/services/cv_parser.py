@@ -52,8 +52,6 @@ SKILL_EVIDENCE_KEYWORDS = [
     "certificate",
     "ders",
     "course",
-    "egitim",
-    "training",
     "github",
     "gitlab",
     "repo",
@@ -74,6 +72,18 @@ SKILL_EVIDENCE_KEYWORDS = [
 
 WEAK_EVIDENCE_WEIGHT = 0.35
 STRONG_EVIDENCE_WEIGHT = 1.0
+SOFT_SKILLS = {"Communication", "Teamwork", "Problem Solving"}
+SOFT_SKILL_EVIDENCE_KEYWORDS = [
+    "birlikte",
+    "is birligi",
+    "gorev",
+    "sorumluluk",
+    "koordine",
+    "yonettim",
+    "liderlik",
+    "sundum",
+    "cozdum",
+]
 
 
 def is_valid_cv_text(cv_text: str) -> bool:
@@ -86,11 +96,17 @@ def is_valid_cv_text(cv_text: str) -> bool:
     return any(keyword_exists(normalized, keyword) for keyword in CV_CONTEXT_KEYWORDS)
 
 
-def calculate_evidence_weight(evidence: str | None) -> float:
+def calculate_evidence_weight(evidence: str | None, skill: str) -> float:
     if not evidence:
         return 0
 
     normalized = normalize_text(evidence)
+    if skill in SOFT_SKILLS and not any(
+        keyword_exists(normalized, keyword)
+        for keyword in SOFT_SKILL_EVIDENCE_KEYWORDS
+    ):
+        return 0
+
     if any(keyword_exists(normalized, keyword) for keyword in SKILL_EVIDENCE_KEYWORDS):
         return STRONG_EVIDENCE_WEIGHT
 
@@ -105,7 +121,7 @@ def parse_cv(cv_text: str) -> dict:
         for skill in skills
     }
     evidence_weight_by_skill = {
-        skill: calculate_evidence_weight(evidence_by_skill.get(skill))
+        skill: calculate_evidence_weight(evidence_by_skill.get(skill), skill)
         for skill in skills
     }
 

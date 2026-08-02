@@ -36,6 +36,7 @@ class AnalyzeResponse(BaseModel):
     match_score: int
     readiness_score: int
     score_explanation: str
+    analysis_warnings: list[str] = Field(default_factory=list)
     matched_skills: list[str]
     missing_skills: list[str]
     critical_missing_skills: list[str] = Field(default_factory=list)

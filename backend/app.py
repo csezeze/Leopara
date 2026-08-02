@@ -69,22 +69,16 @@ def analyze(request: AnalyzeRequest) -> AnalyzeResponse:
             detail="İlan metninde analiz edilebilir bir gereksinim bulunamadı. Lütfen daha net bir ilan metni girin.",
         )
 
+    analysis_warnings = []
     if not match_result["matched_skills"]:
-        raise HTTPException(
-            status_code=422,
-            detail=(
-                "Bu CV ile seçilen ilan arasında analiz edilebilir ortak bir beceri bulunamadı. "
-                "Lütfen doğru CV ve ilan eşleşmesini kontrol edin."
-            ),
+        analysis_warnings.append(
+            "CV geçerli bir belge olarak okundu; ancak ilandaki gereksinimlerle ortak bir beceri "
+            "bulunamadı. Bu nedenle eşleşme skoru 0 olarak hesaplandı."
         )
-
-    if not match_result["evidence_backed_skills"]:
-        raise HTTPException(
-            status_code=422,
-            detail=(
-                "CV'de ilanla ortak görünen beceriler için somut bir kullanım kanıtı bulunamadı. "
-                "Lütfen proje, ders, sertifika veya iş deneyimiyle desteklenen bir CV yükleyin."
-            ),
+    elif not match_result["evidence_backed_skills"]:
+        analysis_warnings.append(
+            "CV ile ilanda ortak beceri ifadeleri bulundu; ancak bu becerileri destekleyen proje, "
+            "ders, sertifika veya somut kullanım kanıtı zayıf olduğu için skor sınırlı tutuldu."
         )
 
     readiness_score = calculate_readiness_score(
@@ -111,6 +105,7 @@ def analyze(request: AnalyzeRequest) -> AnalyzeResponse:
         match_score=match_result["match_score"],
         readiness_score=readiness_score,
         score_explanation=score_explanation,
+        analysis_warnings=analysis_warnings,
         matched_skills=match_result["matched_skills"],
         missing_skills=match_result["missing_skills"],
         critical_missing_skills=match_result["critical_missing_skills"],

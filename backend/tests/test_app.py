@@ -115,21 +115,21 @@ class AnalyzeApiTests(unittest.TestCase):
 
         self.assertNotIn("Machine Learning", skills)
 
-    def test_incompatible_cv_is_not_analyzed(self) -> None:
-        with self.assertRaises(HTTPException) as context:
-            analyze(
-                AnalyzeRequest(
-                    cv_text=(
-                        "Gebze Teknik Üniversitesi Bilgisayar Mühendisliği öğrencisiyim. "
-                        "Backend geliştirme, sistem programlama ve performans odaklı yazılım konularına ilgi duyuyorum."
-                    ),
-                    posting_text="Stajyer adayında Machine Learning bilgisi ve ML proje deneyimi beklenir.",
-                    application_type="internship",
-                )
+    def test_valid_but_incompatible_cv_returns_low_score(self) -> None:
+        payload = analyze(
+            AnalyzeRequest(
+                cv_text=(
+                    "Gebze Teknik Üniversitesi Bilgisayar Mühendisliği öğrencisiyim. "
+                    "Backend geliştirme, sistem programlama ve performans odaklı yazılım konularına ilgi duyuyorum."
+                ),
+                posting_text="Stajyer adayında Machine Learning bilgisi ve ML proje deneyimi beklenir.",
+                application_type="internship",
             )
+        ).model_dump()
 
-        self.assertEqual(context.exception.status_code, 422)
-        self.assertIn("ortak bir beceri bulunamadı", context.exception.detail)
+        self.assertEqual(payload["match_score"], 0)
+        self.assertTrue(payload["analysis_warnings"])
+        self.assertIn("ortak bir beceri bulunamadı", payload["analysis_warnings"][0])
 
     def test_keyword_list_is_not_accepted_as_cv(self) -> None:
         with self.assertRaises(HTTPException) as context:
@@ -144,20 +144,19 @@ class AnalyzeApiTests(unittest.TestCase):
         self.assertEqual(context.exception.status_code, 422)
         self.assertIn("geçerli bir CV gibi görünmüyor", context.exception.detail)
 
-    def test_listed_skills_without_usage_evidence_are_not_analyzed(self) -> None:
+    def test_listed_skills_without_usage_evidence_receive_limited_score(self) -> None:
         posting_text = "Python, Git, Machine Learning ve NLP bilen stajyer aday ariyoruz."
 
-        with self.assertRaises(HTTPException) as context:
-            analyze(
-                AnalyzeRequest(
-                    cv_text=(
-                        "Gebze Teknik Universitesi Bilgisayar Muhendisligi ogrencisiyim. "
-                        "Teknik beceriler: Python, Git, Machine Learning, NLP."
-                    ),
-                    posting_text=posting_text,
-                    application_type="internship",
-                )
+        listed_payload = analyze(
+            AnalyzeRequest(
+                cv_text=(
+                    "Gebze Teknik Universitesi Bilgisayar Muhendisligi ogrencisiyim. "
+                    "Teknik beceriler: Python, Git, Machine Learning, NLP."
+                ),
+                posting_text=posting_text,
+                application_type="internship",
             )
+        ).model_dump()
 
         evidence_backed_payload = analyze(
             AnalyzeRequest(
@@ -171,9 +170,26 @@ class AnalyzeApiTests(unittest.TestCase):
             )
         ).model_dump()
 
-        self.assertEqual(context.exception.status_code, 422)
-        self.assertIn("somut bir kullanım kanıtı", context.exception.detail)
+        self.assertLess(listed_payload["match_score"], evidence_backed_payload["match_score"])
+        self.assertTrue(listed_payload["analysis_warnings"])
+        self.assertIn("skor sınırlı tutuldu", listed_payload["analysis_warnings"][0])
         self.assertGreater(evidence_backed_payload["match_score"], 0)
+
+    def test_experience_heading_does_not_make_skill_strong_evidence(self) -> None:
+        payload = analyze(
+            AnalyzeRequest(
+                cv_text=(
+                    "TOBB Ekonomi ve Teknoloji Universitesi Bilgisayar Muhendisligi ogrencisiyim. "
+                    "Deneyim. Takım çalışması. Python."
+                ),
+                posting_text="Python ve Teamwork bilgisi zorunludur.",
+                application_type="internship",
+            )
+        ).model_dump()
+
+        self.assertLess(payload["match_score"], 50)
+        self.assertIn("Teamwork", payload["missing_skills"])
+        self.assertTrue(payload["analysis_warnings"])
 
     def test_negated_skill_statement_is_not_counted_as_evidence(self) -> None:
         payload = analyze(

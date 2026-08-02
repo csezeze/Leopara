@@ -20,9 +20,9 @@ def match_cv_to_posting(cv_profile: dict, posting_analysis: dict) -> dict:
         priority = detail["priority"]
         priority_weight = detail["weight"]
 
-        if requirement in cv_skills:
+        evidence_weight = evidence_weight_by_skill.get(requirement, 0)
+        if requirement in cv_skills and evidence_weight > 0:
             matched_skills.append(requirement)
-            evidence_weight = evidence_weight_by_skill.get(requirement, 0.35)
             if evidence_weight >= 1.0:
                 evidence_backed_skills.append(requirement)
             matched_weight += (
