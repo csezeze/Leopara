@@ -19,7 +19,7 @@
   --shadow: 0 18px 44px rgba(70, 54, 63, 0.09);
   --high: #247b6c;
   --medium: #3b7d83;
-  --low: #983f4d;
+  --low: #a84b3f;
 }
 
 * {
@@ -122,21 +122,9 @@ textarea {
   height: 100%;
   margin: 0;
   object-fit: contain;
-}
-
-.brand-side-mascot-shirt-line {
-  position: absolute;
-  z-index: 3;
-  top: 129px;
-  left: 122px;
-  width: 2px;
-  height: 28px;
-  border-radius: 999px;
-  background: #b63869;
-  box-shadow: 1px 0 0 rgba(241, 133, 170, 0.7);
-  transform: rotate(18deg);
-  transform-origin: top center;
-  pointer-events: none;
+  filter:
+    drop-shadow(0 0 0.6px rgba(166, 47, 94, 0.42))
+    drop-shadow(0 14px 24px rgba(190, 50, 110, 0.1));
 }
 
 .leopara-speech-bubble {
@@ -165,7 +153,7 @@ textarea {
 .leopara-thought-trail {
   position: absolute;
   bottom: -43px;
-  left: 32%;
+  left: 28%;
   width: 44px;
   height: 40px;
   pointer-events: none;
@@ -879,7 +867,7 @@ textarea {
 }
 
 .progress-track.score-low {
-  background: #f1dfe3;
+  background: #f2dfda;
 }
 
 .progress-bar {
@@ -977,13 +965,13 @@ textarea {
   padding: 14px;
   border-left: 4px solid var(--low);
   border-radius: 0 6px 6px 0;
-  background: #fbf1f3;
+  background: #fbf2ef;
 }
 
 .tag-critical {
-  border-color: #e2bcc3;
+  border-color: #e2c1b9;
   background: #ffffff;
-  color: #8f3644;
+  color: #8f4036;
 }
 
 .suggestion-list {
