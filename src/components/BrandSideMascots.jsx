@@ -63,15 +63,17 @@ function BrandSideMascots() {
       </aside>
 
       <aside className="leopara-side-rail leopara-right-rail">
-        <img
-          className="brand-side-mascot brand-side-mascot-serious"
-          src="/brand/leopara-mark.png"
-          alt=""
-          width="384"
-          height="512"
-          aria-hidden="true"
-          draggable={false}
-        />
+        <div className="brand-side-mascot-frame" aria-hidden="true">
+          <img
+            className="brand-side-mascot brand-side-mascot-serious"
+            src="/brand/leopara-mark.png"
+            alt=""
+            width="384"
+            height="512"
+            draggable={false}
+          />
+          <span className="brand-side-mascot-shirt-line" />
+        </div>
         <div className="leopara-speech-bubble" role="note">
           <p>
             Sevimli göründüğüme bakmayın; CV'nizi ilan gereksinimlerine göre kanıtlarıyla ve

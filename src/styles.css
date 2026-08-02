@@ -109,17 +109,41 @@ textarea {
   filter: drop-shadow(0 14px 24px rgba(190, 50, 110, 0.1));
 }
 
-.brand-side-mascot-serious {
+.brand-side-mascot-frame {
+  position: relative;
+  z-index: 2;
   width: min(100%, 164px);
   height: 189px;
+  margin: 0 auto 18px;
+}
+
+.brand-side-mascot-frame .brand-side-mascot-serious {
+  width: 100%;
+  height: 100%;
+  margin: 0;
   object-fit: contain;
+}
+
+.brand-side-mascot-shirt-line {
+  position: absolute;
+  z-index: 3;
+  top: 129px;
+  left: 122px;
+  width: 2px;
+  height: 28px;
+  border-radius: 999px;
+  background: #b63869;
+  box-shadow: 1px 0 0 rgba(241, 133, 170, 0.7);
+  transform: rotate(18deg);
+  transform-origin: top center;
+  pointer-events: none;
 }
 
 .leopara-speech-bubble {
   position: absolute;
   z-index: 4;
   top: 0;
-  left: 58%;
+  left: 66%;
   width: 230px;
   margin: 0;
   padding: 14px 16px;
@@ -158,21 +182,21 @@ textarea {
 
 .leopara-thought-trail span:nth-child(1) {
   top: 0;
-  left: 0;
+  right: 0;
   width: 14px;
   height: 14px;
 }
 
 .leopara-thought-trail span:nth-child(2) {
   top: 15px;
-  left: 15px;
+  right: 15px;
   width: 10px;
   height: 10px;
 }
 
 .leopara-thought-trail span:nth-child(3) {
   top: 28px;
-  left: 28px;
+  right: 28px;
   width: 7px;
   height: 7px;
 }
