@@ -35,7 +35,7 @@ function ResultCard({ result }) {
         </div>
       </div>
 
-      <div className="progress-track">
+      <div className={`progress-track ${scoreClass}`}>
         <div
           className={`progress-bar ${scoreClass}`}
           style={{ width: `${result.match_score}%` }}
