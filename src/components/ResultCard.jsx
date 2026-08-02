@@ -12,6 +12,7 @@ function getScoreClass(score) {
 
 const priorityLabels = {
   required: "Zorunlu",
+  unspecified: "Belirtilmedi",
   preferred: "Tercih Edilen",
   bonus: "Ek Avantaj",
 };
@@ -110,8 +111,8 @@ function ResultCard({ result }) {
                   <tr key={row.requirement}>
                     <td>{row.requirement}</td>
                     <td>
-                      <span className={`priority-pill ${row.priority || "required"}`}>
-                        {priorityLabels[row.priority] || priorityLabels.required}
+                      <span className={`priority-pill ${row.priority || "unspecified"}`}>
+                        {priorityLabels[row.priority] || priorityLabels.unspecified}
                       </span>
                     </td>
                     <td>

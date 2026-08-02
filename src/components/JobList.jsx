@@ -11,12 +11,12 @@ function JobList({
     <section className="card job-list-card branded-form-card">
       <div className="section-heading branded-section-heading">
         <div>
-          <h2>İlan ve Başvuru Modu</h2>
-          <p>İlan metnini yapıştır, modu seç veya hazır örneklerden birini kullan.</p>
+          <h2>İlan ve Başvuru Türü Seçimi</h2>
+          <p>İlan metnini ekle, iş veya staj türünü seç ya da hazır ilanlardan birini kullan.</p>
         </div>
       </div>
 
-      <div className="mode-toggle" aria-label="Başvuru modu">
+      <div className="mode-toggle" aria-label="Başvuru türü">
         <button
           className={applicationType === "job" ? "is-active" : ""}
           type="button"

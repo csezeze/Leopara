@@ -1,6 +1,6 @@
 import re
 
-from services.skills import find_evidence, find_skills, keyword_exists, normalize_text
+from services.skills import find_cv_skills, find_evidence, keyword_exists, normalize_text
 
 
 CV_CONTEXT_KEYWORDS = [
@@ -99,7 +99,7 @@ def calculate_evidence_weight(evidence: str | None) -> float:
 
 def parse_cv(cv_text: str) -> dict:
     normalized = normalize_text(cv_text)
-    skills = find_skills(cv_text)
+    skills = find_cv_skills(cv_text)
     evidence_by_skill = {
         skill: find_evidence(cv_text, skill)
         for skill in skills

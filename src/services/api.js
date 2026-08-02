@@ -23,7 +23,7 @@ const skillKeywords = {
   HTML: ["html"],
   CSS: ["css"],
   Agile: ["agile", "scrum", "sprint"],
-  Testing: ["test", "pytest", "unit test"],
+  Testing: ["test", "testing", "software testing", "yazılım testi", "pytest", "unit test"],
   Deployment: ["deployment", "deploy", "vercel", "render", "railway"],
   Communication: ["iletişim", "communication"],
   Teamwork: ["takım", "ekip", "team", "teamwork"],
@@ -99,8 +99,44 @@ const skillEvidenceKeywords = [
   "yonettim",
 ];
 
+const negationMarkers = [
+  "bulunmuyor",
+  "bulunmamaktadir",
+  "bilmiyorum",
+  "kullanmadim",
+  "calismadim",
+  "deneyimim yok",
+  "tecrubem yok",
+  "bilgim yok",
+  "sahip degilim",
+  "no experience",
+  "do not know",
+  "did not use",
+  "without experience",
+  "lack experience",
+];
+
+const testingMetaMarkers = [
+  "test amaciyla",
+  "test icin hazirlanmis",
+  "kurgusal ornek",
+  "ornek cv",
+  "deneme amacli",
+  "sample cv",
+  "fictional cv",
+];
+
+const behavioralQuestions = [
+  "Bir ekip çalışmasında fikir ayrılığı yaşadığınız bir durumu, yaklaşımınızı ve sonucu anlatır mısınız?",
+  "Beklenmedik bir sorunla karşılaştığınızda önceliklerinizi nasıl belirlediğinize örnek verir misiniz?",
+  "Kısa sürede yeni bir konu öğrenmeniz gereken bir deneyimi ve kullandığınız yöntemi anlatır mısınız?",
+  "Geri bildirim aldığınız ve çalışma biçiminizi değiştirdiğiniz bir durumu paylaşır mısınız?",
+  "Sorumluluğunu üstlendiğiniz bir işte hata yaptığınızda durumu nasıl yönettiğinizi anlatır mısınız?",
+];
+
 const requirementPriorityWeights = {
   required: 1,
+  unspecified: 0.8,
   preferred: 0.6,
   bonus: 0.3,
 };
@@ -261,7 +297,7 @@ function buildRequirementDetails(postingText) {
           ? candidate
           : highest,
       )
-      : "required";
+      : "unspecified";
 
     return {
       skill,
@@ -279,6 +315,37 @@ function findSkills(text) {
     .map(([skill]) => skill);
 }
 
+function hasPositiveSkillMention(sentence, skill) {
+  const keywords = skillKeywords[skill] || [skill.toLowerCase()];
+  const clauses = sentence.split(/\b(?:ama|ancak|fakat|but|however)\b/i);
+
+  return clauses.some((clause) => {
+    const normalizedClause = normalizeText(clause);
+    const containsSkill = keywords.some((keyword) => keywordExists(normalizedClause, keyword));
+
+    if (!containsSkill) {
+      return false;
+    }
+
+    if (negationMarkers.some((marker) => keywordExists(normalizedClause, marker))) {
+      return false;
+    }
+
+    if (
+      skill === "Testing"
+      && testingMetaMarkers.some((marker) => keywordExists(normalizedClause, marker))
+    ) {
+      return false;
+    }
+
+    return true;
+  });
+}
+
+function findCvSkills(text) {
+  return Object.keys(skillKeywords).filter((skill) => findEvidence(text, skill));
+}
+
 function isValidCvText(text) {
   const normalized = normalizeText(text);
   const words = normalized.match(/[a-z0-9]+/g) || [];
@@ -291,9 +358,12 @@ function isValidCvText(text) {
 }
 
 function validateAnalysisPayload(payload) {
-  const cvSkills = findSkills(payload.cv_text);
+  const cvSkills = findCvSkills(payload.cv_text);
   const requirements = findSkills(payload.posting_text);
   const matchedSkills = requirements.filter((skill) => cvSkills.includes(skill));
+  const evidenceBackedSkills = matchedSkills.filter(
+    (skill) => getEvidenceWeight(payload.cv_text, skill) >= 1,
+  );
 
   if (!requirements.length) {
     throw new Error("İlan metninde analiz edilebilir bir gereksinim bulunamadı. Lütfen daha net bir ilan metni girin.");
@@ -310,15 +380,18 @@ function validateAnalysisPayload(payload) {
       "Bu CV ile seçilen ilan arasında analiz edilebilir ortak bir beceri bulunamadı. Lütfen doğru CV ve ilan eşleşmesini kontrol edin.",
     );
   }
+
+  if (!evidenceBackedSkills.length) {
+    throw new Error(
+      "CV'de ilanla ortak görünen beceriler için somut bir kullanım kanıtı bulunamadı. Lütfen proje, ders, sertifika veya iş deneyimiyle desteklenen bir CV yükleyin.",
+    );
+  }
 }
 
 function findEvidence(text, skill) {
-  const keywords = skillKeywords[skill] || [skill.toLowerCase()];
   const sentences = text.split(/[.!?\n;]/).map((sentence) => sentence.trim()).filter(Boolean);
 
-  return sentences.find((sentence) =>
-    keywords.some((keyword) => keywordExists(normalizeText(sentence), keyword)),
-  ) || null;
+  return sentences.find((sentence) => hasPositiveSkillMention(sentence, skill)) || null;
 }
 
 function getEvidenceWeight(text, skill) {
@@ -336,8 +409,64 @@ function getEvidenceWeight(text, skill) {
   return hasStrongEvidence ? 1 : 0.35;
 }
 
+function buildProjectRecommendation(missingSkills, matchedSkills, applicationType) {
+  const relevantSkills = [...new Set([...missingSkills.slice(0, 3), ...matchedSkills.slice(0, 2)])];
+  const technologies = relevantSkills.join(", ") || "ilandaki temel teknolojiler";
+  const hasAny = (skills) => skills.some((skill) => relevantSkills.includes(skill));
+  const scope = applicationType === "internship" ? "staj portfolyon için" : "portfolyon için";
+  let idea;
+
+  if (hasAny(["Machine Learning", "NLP", "Data Analysis"])) {
+    idea = "ilan metinlerinden beceri çıkaran, aday-ilan uyumunu açıklayan ve sonuçları ölçüm metrikleriyle gösteren bir analiz paneli";
+  } else if (hasAny(["React", "JavaScript", "TypeScript", "HTML", "CSS"])) {
+    idea = "rol bazlı giriş, form doğrulama, filtreleme, API entegrasyonu ve responsive ekranlar içeren bir başvuru takip paneli";
+  } else if (hasAny(["Python", "FastAPI", "Flask", "REST API", "SQL", "PostgreSQL"])) {
+    idea = "kimlik doğrulama, veri doğrulama, PostgreSQL kayıtları, testler ve API dokümantasyonu içeren bir aday başvuru servisi";
+  } else if (hasAny(["Testing", "Deployment", "Docker", "Git"])) {
+    idea = "otomatik test, Docker kurulumu, CI kontrolü, hata raporu ve canlı ortam dağıtımı içeren bir yayınlama hattı";
+  } else {
+    idea = "kullanıcı girişi, veri kaydı, arama, raporlama ve hata yönetimi içeren uçtan uca bir iş takip uygulaması";
+  }
+
+  return `${scope} ${technologies} kullanarak ${idea} geliştir. Orta seviye kapsam için README'de mimariyi, kurulum adımlarını, test senaryolarını ve ölçülebilir çıktıları göster.`;
+}
+
+function buildInterviewQuestions(matchedSkills, missingSkills, applicationType) {
+  const questions = [
+    ...matchedSkills.slice(0, 2).map(
+      (skill) => `${skill} ile yaptığınız bir projeyi, sorumluluğunuzu ve elde ettiğiniz çıktıyı anlatır mısınız?`,
+    ),
+    ...missingSkills.slice(0, 2).map(
+      (skill) => `${skill} konusunda kendinizi geliştirmek için nasıl bir öğrenme ve uygulama planı izlersiniz?`,
+    ),
+    applicationType === "internship"
+      ? "Bu stajın ilk ayında hangi teknik kazanımı somut bir çıktıya dönüştürmek istersiniz?"
+      : "Bu role başladıktan sonraki ilk ayda hangi teknik çıktıyla değer üretmeyi planlarsınız?",
+  ];
+  const fallbackQuestions = [
+    "CV'nizdeki en somut proje çıktısını ve bu projedeki kişisel katkınızı anlatır mısınız?",
+    "İlandaki teknik gereksinimlerden hangisinde en güçlü olduğunuzu düşünüyorsunuz ve neden?",
+    "Bir teknik problemi analiz ederken hangi adımları izlersiniz?",
+    "Eksik gördüğünüz bir beceriyi geliştirmek için nasıl ölçülebilir bir plan hazırlarsınız?",
+  ];
+
+  fallbackQuestions.forEach((question) => {
+    if (questions.length < 4 && !questions.includes(question)) {
+      questions.push(question);
+    }
+  });
+
+  const selectedQuestions = questions.slice(0, 4);
+  const behavioralQuestion = behavioralQuestions[
+    Math.floor(Math.random() * behavioralQuestions.length)
+  ];
+  selectedQuestions.splice(Math.floor(Math.random() * 5), 0, behavioralQuestion);
+
+  return selectedQuestions;
+}
+
 function buildFallbackAnalysis(payload) {
-  const cvSkills = findSkills(payload.cv_text);
+  const cvSkills = findCvSkills(payload.cv_text);
   const requirementDetails = buildRequirementDetails(payload.posting_text);
   const requirements = requirementDetails.map((detail) => detail.skill);
   const matchedSkills = requirements.filter((skill) => cvSkills.includes(skill));
@@ -382,6 +511,14 @@ function buildFallbackAnalysis(payload) {
     : !criticalMissingSkills.length
       ? "Belirgin bir eksik beceri görünmüyor."
       : "";
+  const projectRecommendation = buildProjectRecommendation(
+    missingSkills,
+    matchedSkills,
+    payload.application_type,
+  );
+  const relevantTechnologies = [...new Set([...missingSkills, ...matchedSkills])]
+    .slice(0, 4)
+    .join(", ") || "İlandaki teknolojiler";
 
   return {
     match_score: matchScore,
@@ -416,27 +553,19 @@ function buildFallbackAnalysis(payload) {
         hasGithub ? "Portfolyo bağlantısı daha görünür yazılabilir." : "GitHub veya portfolyo bağlantısı eksik.",
       ],
     },
-    mini_project_recommendation: missingSkills.length
-      ? `${missingSkills.slice(0, 3).join(", ")} eksiklerini göstermek için küçük bir portfolyo projesi geliştirip GitHub'a ekle.`
-      : "Mevcut becerilerin ilanla iyi örtüşüyor. CV'deki proje kanıtlarını daha ölçülebilir hale getirebilirsin.",
+    mini_project_recommendation: projectRecommendation,
     cv_improvement_suggestions: [
       {
-        original: "CV'deki proje ve beceri açıklamaları",
-        improved: "Her beceri için proje, ders, sertifika veya iş deneyimi gibi somut bir kanıt ekleyin.",
+        original: `${relevantTechnologies} için CV'deki proje ve beceri kanıtları`,
+        improved: `${projectRecommendation} Projeyi gerçekten tamamladıktan sonra kullandığınız teknolojileri, sorumluluğunuzu ve ölçülebilir çıktıyı CV'nize ekleyin.`,
         ethical_note: "Bu öneri yalnızca CV'deki mevcut bilgiyi daha açık ifade eder. Sahip olmadığınız deneyimi eklemeyin.",
       },
     ],
-    interview_questions: [
-      matchedSkills[0]
-        ? `${matchedSkills[0]} ile yaptığınız bir projeyi anlatır mısınız?`
-        : "Bu başvuru için en güçlü teknik yönünüz nedir?",
-      missingSkills[0]
-        ? `${missingSkills[0]} konusunda kendinizi geliştirmek için nasıl bir plan izlersiniz?`
-        : "İlandaki gereksinimlerden hangisinde en güçlü olduğunuzu düşünüyorsunuz?",
-      "CV'nizdeki en somut proje kanıtını nasıl açıklarsınız?",
-      "Bu pozisyon için ilk ayda hangi konuda değer üretmeyi hedeflersiniz?",
-      "Eksik gördüğünüz becerileri tamamlamak için hangi kaynakları kullanırsınız?",
-    ],
+    interview_questions: buildInterviewQuestions(
+      matchedSkills,
+      missingSkills,
+      payload.application_type,
+    ),
   };
 }
 

@@ -5,6 +5,7 @@ from fastapi import HTTPException
 from app import analyze
 from models.schemas import AnalyzeRequest
 from services.job_analyzer import analyze_posting
+from services.interview import BEHAVIORAL_QUESTIONS
 from services.skills import find_skills
 
 
@@ -20,6 +21,14 @@ class AnalyzeApiTests(unittest.TestCase):
         self.assertEqual(details["Python"]["priority"], "required")
         self.assertEqual(details["Docker"]["priority"], "preferred")
         self.assertEqual(details["Git"]["priority"], "bonus")
+
+    def test_unmarked_requirement_is_not_labeled_required(self) -> None:
+        details = analyze_posting("Ekibimiz React ve TypeScript kullanıyor.")[
+            "requirement_details"
+        ]
+
+        self.assertTrue(details)
+        self.assertTrue(all(item["priority"] == "unspecified" for item in details))
 
     def test_repeated_skill_uses_highest_priority_once(self) -> None:
         details = analyze_posting(
@@ -135,19 +144,20 @@ class AnalyzeApiTests(unittest.TestCase):
         self.assertEqual(context.exception.status_code, 422)
         self.assertIn("geçerli bir CV gibi görünmüyor", context.exception.detail)
 
-    def test_listed_skills_score_lower_than_evidence_backed_skills(self) -> None:
+    def test_listed_skills_without_usage_evidence_are_not_analyzed(self) -> None:
         posting_text = "Python, Git, Machine Learning ve NLP bilen stajyer aday ariyoruz."
 
-        listed_payload = analyze(
-            AnalyzeRequest(
-                cv_text=(
-                    "Gebze Teknik Universitesi Bilgisayar Muhendisligi ogrencisiyim. "
-                    "Teknik beceriler: Python, Git, Machine Learning, NLP."
-                ),
-                posting_text=posting_text,
-                application_type="internship",
+        with self.assertRaises(HTTPException) as context:
+            analyze(
+                AnalyzeRequest(
+                    cv_text=(
+                        "Gebze Teknik Universitesi Bilgisayar Muhendisligi ogrencisiyim. "
+                        "Teknik beceriler: Python, Git, Machine Learning, NLP."
+                    ),
+                    posting_text=posting_text,
+                    application_type="internship",
+                )
             )
-        ).model_dump()
 
         evidence_backed_payload = analyze(
             AnalyzeRequest(
@@ -161,11 +171,90 @@ class AnalyzeApiTests(unittest.TestCase):
             )
         ).model_dump()
 
-        self.assertLess(listed_payload["match_score"], 70)
-        self.assertGreater(
-            evidence_backed_payload["match_score"],
-            listed_payload["match_score"],
+        self.assertEqual(context.exception.status_code, 422)
+        self.assertIn("somut bir kullanım kanıtı", context.exception.detail)
+        self.assertGreater(evidence_backed_payload["match_score"], 0)
+
+    def test_negated_skill_statement_is_not_counted_as_evidence(self) -> None:
+        payload = analyze(
+            AnalyzeRequest(
+                cv_text=(
+                    "Bilgisayar muhendisligi ogrencisiyim. "
+                    "React ile bir ders projesi gelistirdim ve GitHub uzerinde yayinladim. "
+                    "JavaScript, API entegrasyonu ve yayinlama deneyimim bulunmuyor."
+                ),
+                posting_text="React ve JavaScript bilgisi zorunludur.",
+                application_type="internship",
+            )
+        ).model_dump()
+
+        self.assertIn("React", payload["matched_skills"])
+        self.assertIn("JavaScript", payload["missing_skills"])
+        javascript_row = next(
+            row for row in payload["evidence_table"] if row["requirement"] == "JavaScript"
         )
+        self.assertEqual(javascript_row["status"], "missing")
+        self.assertIsNone(javascript_row["evidence"])
+
+    def test_document_test_label_is_not_counted_as_testing_skill(self) -> None:
+        payload = analyze(
+            AnalyzeRequest(
+                cv_text=(
+                    "Test amaciyla hazirlanmis kurgusal ornek CV. "
+                    "Yonetim Bilisim Sistemleri ogrencisiyim. "
+                    "Python ile kisisel bir veri analizi projesi gelistirdim ve GitHub'a ekledim."
+                ),
+                posting_text="Python ve Testing bilgisi zorunludur.",
+                application_type="internship",
+            )
+        ).model_dump()
+
+        self.assertIn("Python", payload["matched_skills"])
+        self.assertIn("Testing", payload["missing_skills"])
+
+    def test_project_and_cv_suggestions_follow_posting_technologies(self) -> None:
+        payload = analyze(
+            AnalyzeRequest(
+                cv_text=(
+                    "Bilgisayar muhendisligi ogrencisiyim. "
+                    "Python ile ders projesi gelistirdim ve GitHub uzerinde yayinladim."
+                ),
+                posting_text=(
+                    "Python zorunludur. FastAPI ve PostgreSQL tercih edilir. "
+                    "REST API bilgisi ek avantajdir."
+                ),
+                application_type="internship",
+            )
+        ).model_dump()
+
+        self.assertIn("FastAPI", payload["mini_project_recommendation"])
+        self.assertIn("PostgreSQL", payload["mini_project_recommendation"])
+        self.assertIn("aday başvuru servisi", payload["mini_project_recommendation"])
+        self.assertTrue(
+            any(
+                "FastAPI" in suggestion["improved"]
+                for suggestion in payload["cv_improvement_suggestions"]
+            )
+        )
+
+    def test_interview_questions_include_one_behavioral_question(self) -> None:
+        payload = analyze(
+            AnalyzeRequest(
+                cv_text=(
+                    "Bilgisayar muhendisligi ogrencisiyim. "
+                    "Python ile veri analizi projesi gelistirdim ve GitHub uzerinde yayinladim."
+                ),
+                posting_text="Python zorunludur. SQL ve Git tercih edilir.",
+                application_type="internship",
+            )
+        ).model_dump()
+
+        behavioral_count = sum(
+            question in BEHAVIORAL_QUESTIONS
+            for question in payload["interview_questions"]
+        )
+        self.assertEqual(len(payload["interview_questions"]), 5)
+        self.assertEqual(behavioral_count, 1)
 
     def test_real_ml_abbreviation_still_matches(self) -> None:
         skills = find_skills("Python ile ML modeli eğittim ve sonuçları değerlendirdim.")

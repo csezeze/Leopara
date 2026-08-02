@@ -40,18 +40,57 @@ def build_internship_analysis(cv_profile: dict, application_type: str) -> dict:
     }
 
 
-def recommend_mini_project(missing_skills: list[str], application_type: str) -> str:
-    if not missing_skills:
-        return "Mevcut becerilerin ilanla iyi örtüşüyor. Başvurmadan önce CV'ndeki proje kanıtlarını daha ölçülebilir hale getirebilirsin."
-
-    primary = ", ".join(missing_skills[:3])
-    if application_type == "internship":
-        return f"{primary} becerilerini göstermek için küçük bir portfolyo projesi geliştirip GitHub'a ekle. Örneğin veri girişi, API ve raporlama içeren basit ama tamamlanmış bir uygulama hazırlayabilirsin."
-
-    return f"{primary} eksiklerini kapatmak için ilanla ilişkili küçük bir uçtan uca proje geliştir. Projede problem tanımı, kurulum adımları ve ekran/API örneklerini README'de göster."
+def unique_skills(skills: list[str]) -> list[str]:
+    return list(dict.fromkeys(skills))
 
 
-def build_cv_improvement_suggestions(cv_text: str) -> list[dict]:
+def recommend_mini_project(
+    missing_skills: list[str],
+    matched_skills: list[str],
+    application_type: str,
+) -> str:
+    relevant_skills = unique_skills(missing_skills[:3] + matched_skills[:2])
+    skill_set = set(relevant_skills)
+    technologies = ", ".join(relevant_skills) or "ilandaki temel teknolojiler"
+    scope = "staj portfolyon için" if application_type == "internship" else "portfolyon için"
+
+    if skill_set & {"Machine Learning", "NLP", "Data Analysis"}:
+        idea = (
+            "ilan metinlerinden beceri çıkaran, aday-ilan uyumunu açıklayan ve sonuçları "
+            "ölçüm metrikleriyle gösteren bir analiz paneli"
+        )
+    elif skill_set & {"React", "JavaScript", "TypeScript", "HTML", "CSS"}:
+        idea = (
+            "rol bazlı giriş, form doğrulama, filtreleme, API entegrasyonu ve responsive "
+            "ekranlar içeren bir başvuru takip paneli"
+        )
+    elif skill_set & {"Python", "FastAPI", "Flask", "REST API", "SQL", "PostgreSQL"}:
+        idea = (
+            "kimlik doğrulama, veri doğrulama, PostgreSQL kayıtları, testler ve API "
+            "dokümantasyonu içeren bir aday başvuru servisi"
+        )
+    elif skill_set & {"Testing", "Deployment", "Docker", "Git"}:
+        idea = (
+            "otomatik test, Docker kurulumu, CI kontrolü, hata raporu ve canlı ortam "
+            "dağıtımı içeren bir yayınlama hattı"
+        )
+    else:
+        idea = (
+            "kullanıcı girişi, veri kaydı, arama, raporlama ve hata yönetimi içeren uçtan "
+            "uca bir iş takip uygulaması"
+        )
+
+    return (
+        f"{scope} {technologies} kullanarak {idea} geliştir. Orta seviye kapsam için "
+        "README'de mimariyi, kurulum adımlarını, test senaryolarını ve ölçülebilir çıktıları göster."
+    )
+
+
+def build_cv_improvement_suggestions(
+    cv_text: str,
+    relevant_skills: list[str],
+    project_recommendation: str,
+) -> list[dict]:
     suggestions: list[dict] = []
     for sentence in split_sentences(cv_text):
         lowered = sentence.lower()
@@ -64,12 +103,14 @@ def build_cv_improvement_suggestions(cv_text: str) -> list[dict]:
                 "ethical_note": ETHICAL_NOTE,
             })
 
-    if not suggestions:
-        suggestions.append({
-            "original": "CV'deki proje ve beceri açıklamaları",
-            "improved": "Her beceri için proje, ders, sertifika veya iş deneyimi gibi somut bir kanıt ekleyin.",
-            "ethical_note": ETHICAL_NOTE,
-        })
+    technologies = ", ".join(unique_skills(relevant_skills)[:4]) or "ilandaki teknolojiler"
+    suggestions.append({
+        "original": f"{technologies} için CV'deki proje ve beceri kanıtları",
+        "improved": (
+            f"{project_recommendation} Projeyi gerçekten tamamladıktan sonra kullandığınız "
+            "teknolojileri, sorumluluğunuzu ve ölçülebilir çıktıyı CV'nize ekleyin."
+        ),
+        "ethical_note": ETHICAL_NOTE,
+    })
 
     return suggestions[:3]
-

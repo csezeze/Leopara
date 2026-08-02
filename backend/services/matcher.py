@@ -1,6 +1,6 @@
 def match_cv_to_posting(cv_profile: dict, posting_analysis: dict) -> dict:
     requirement_details = posting_analysis.get("requirement_details") or [
-        {"skill": skill, "priority": "required", "weight": 1.0}
+        {"skill": skill, "priority": "unspecified", "weight": 0.8}
         for skill in posting_analysis["requirements"]
     ]
     cv_skills = set(cv_profile["skills"])
@@ -9,6 +9,7 @@ def match_cv_to_posting(cv_profile: dict, posting_analysis: dict) -> dict:
 
     evidence_table = []
     matched_skills = []
+    evidence_backed_skills = []
     missing_skills = []
     critical_missing_skills = []
     matched_weight = 0.0
@@ -21,8 +22,11 @@ def match_cv_to_posting(cv_profile: dict, posting_analysis: dict) -> dict:
 
         if requirement in cv_skills:
             matched_skills.append(requirement)
+            evidence_weight = evidence_weight_by_skill.get(requirement, 0.35)
+            if evidence_weight >= 1.0:
+                evidence_backed_skills.append(requirement)
             matched_weight += (
-                evidence_weight_by_skill.get(requirement, 0.35) * priority_weight
+                evidence_weight * priority_weight
             )
             evidence_table.append({
                 "requirement": requirement,
@@ -48,6 +52,7 @@ def match_cv_to_posting(cv_profile: dict, posting_analysis: dict) -> dict:
     return {
         "match_score": match_score,
         "matched_skills": matched_skills,
+        "evidence_backed_skills": evidence_backed_skills,
         "missing_skills": missing_skills,
         "critical_missing_skills": critical_missing_skills,
         "evidence_table": evidence_table,

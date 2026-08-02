@@ -20,12 +20,41 @@ SKILL_KEYWORDS: dict[str, list[str]] = {
     "HTML": ["html"],
     "CSS": ["css"],
     "Agile": ["agile", "scrum", "sprint"],
-    "Testing": ["test", "pytest", "unit test"],
+    "Testing": ["test", "testing", "software testing", "yazılım testi", "pytest", "unit test"],
     "Deployment": ["deployment", "deploy", "vercel", "render", "railway"],
     "Communication": ["iletişim", "communication"],
     "Teamwork": ["takım", "ekip", "team", "teamwork"],
     "Problem Solving": ["problem solving", "problem çözme", "problem cozme"],
 }
+
+NEGATION_MARKERS = [
+    "bulunmuyor",
+    "bulunmamaktadir",
+    "bilmiyorum",
+    "kullanmadim",
+    "calismadim",
+    "deneyimim yok",
+    "tecrubem yok",
+    "bilgim yok",
+    "sahip degilim",
+    "no experience",
+    "do not know",
+    "did not use",
+    "without experience",
+    "lack experience",
+]
+
+TESTING_META_MARKERS = [
+    "test amaciyla",
+    "test icin hazirlanmis",
+    "kurgusal ornek",
+    "ornek cv",
+    "deneme amacli",
+    "sample cv",
+    "fictional cv",
+]
+
+CONTRAST_PATTERN = re.compile(r"\b(?:ama|ancak|fakat|but|however)\b", re.IGNORECASE)
 
 TURKISH_CHAR_MAP = str.maketrans({
     "ı": "i",
@@ -72,10 +101,33 @@ def find_skills(text: str) -> list[str]:
     return found
 
 
-def find_evidence(text: str, skill: str) -> str | None:
+def has_positive_skill_mention(sentence: str, skill: str) -> bool:
     keywords = SKILL_KEYWORDS.get(skill, [skill.lower()])
+
+    for clause in CONTRAST_PATTERN.split(sentence):
+        normalized_clause = normalize_text(clause)
+        if not any(keyword_exists(normalized_clause, keyword) for keyword in keywords):
+            continue
+
+        if any(keyword_exists(normalized_clause, marker) for marker in NEGATION_MARKERS):
+            continue
+
+        if skill == "Testing" and any(
+            keyword_exists(normalized_clause, marker) for marker in TESTING_META_MARKERS
+        ):
+            continue
+
+        return True
+
+    return False
+
+
+def find_evidence(text: str, skill: str) -> str | None:
     for sentence in split_sentences(text):
-        normalized_sentence = normalize_text(sentence)
-        if any(keyword_exists(normalized_sentence, keyword) for keyword in keywords):
+        if has_positive_skill_mention(sentence, skill):
             return sentence
     return None
+
+
+def find_cv_skills(text: str) -> list[str]:
+    return [skill for skill in SKILL_KEYWORDS if find_evidence(text, skill)]

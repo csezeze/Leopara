@@ -11,6 +11,7 @@ from services.skills import (
 
 REQUIREMENT_PRIORITY_WEIGHTS = {
     "required": 1.0,
+    "unspecified": 0.8,
     "preferred": 0.6,
     "bonus": 0.3,
 }
@@ -89,7 +90,7 @@ def build_requirement_details(posting_text: str, requirements: list[str]) -> lis
         priority = (
             max(detected_priorities, key=REQUIREMENT_PRIORITY_WEIGHTS.get)
             if detected_priorities
-            else "required"
+            else "unspecified"
         )
         details.append({
             "skill": skill,

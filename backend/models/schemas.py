@@ -14,8 +14,8 @@ class AnalyzeRequest(BaseModel):
 
 class EvidenceItem(BaseModel):
     requirement: str
-    priority: Literal["required", "preferred", "bonus"] = "required"
-    priority_weight: float = 1.0
+    priority: Literal["required", "unspecified", "preferred", "bonus"] = "unspecified"
+    priority_weight: float = 0.8
     status: Literal["matched", "missing"]
     evidence: str | None = None
 

@@ -113,7 +113,7 @@ textarea {
   position: absolute;
   z-index: 4;
   top: 0;
-  left: 50%;
+  left: 58%;
   width: 230px;
   margin: 0;
   padding: 14px 16px;
@@ -135,7 +135,7 @@ textarea {
 .leopara-thought-trail {
   position: absolute;
   bottom: -43px;
-  left: 50%;
+  left: 42%;
   width: 44px;
   height: 40px;
   pointer-events: none;
@@ -913,6 +913,12 @@ textarea {
 .priority-pill.required {
   color: #9c294f;
   background: #fae9ef;
+}
+
+.priority-pill.unspecified {
+  border-color: #ddd2d7;
+  background: #f7f3f5;
+  color: #665a60;
 }
 
 .priority-pill.preferred {

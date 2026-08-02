@@ -78,6 +78,15 @@ def analyze(request: AnalyzeRequest) -> AnalyzeResponse:
             ),
         )
 
+    if not match_result["evidence_backed_skills"]:
+        raise HTTPException(
+            status_code=422,
+            detail=(
+                "CV'de ilanla ortak görünen beceriler için somut bir kullanım kanıtı bulunamadı. "
+                "Lütfen proje, ders, sertifika veya iş deneyimiyle desteklenen bir CV yükleyin."
+            ),
+        )
+
     readiness_score = calculate_readiness_score(
         match_result["match_score"],
         cv_profile,
@@ -92,6 +101,11 @@ def analyze(request: AnalyzeRequest) -> AnalyzeResponse:
         request.application_type,
         match_result["critical_missing_skills"],
     )
+    project_recommendation = recommend_mini_project(
+        match_result["missing_skills"],
+        match_result["matched_skills"],
+        request.application_type,
+    )
 
     return AnalyzeResponse(
         match_score=match_result["match_score"],
@@ -102,11 +116,12 @@ def analyze(request: AnalyzeRequest) -> AnalyzeResponse:
         critical_missing_skills=match_result["critical_missing_skills"],
         evidence_table=match_result["evidence_table"],
         internship_analysis=build_internship_analysis(cv_profile, request.application_type),
-        mini_project_recommendation=recommend_mini_project(
-            match_result["missing_skills"],
-            request.application_type,
+        mini_project_recommendation=project_recommendation,
+        cv_improvement_suggestions=build_cv_improvement_suggestions(
+            request.cv_text,
+            match_result["missing_skills"] + match_result["matched_skills"],
+            project_recommendation,
         ),
-        cv_improvement_suggestions=build_cv_improvement_suggestions(request.cv_text),
         interview_questions=generate_interview_questions(
             match_result["matched_skills"],
             match_result["missing_skills"],

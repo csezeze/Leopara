@@ -40,7 +40,7 @@ function CvInput({
         <div className="file-dropzone">
           <strong>CV Dosyası Yükleme</strong>
           <p className="helper-text">
-            Kabul edilen formatlar: PDF, DOCX. Uygun dosyalarda metin frontend tarafında okunup textarea alanına aktarılır.
+            PDF veya DOCX dosyanızı seçin. CV metni otomatik olarak okunup yukarıdaki alana eklenir.
           </p>
           <input
             key={fileInputKey}
