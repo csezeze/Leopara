@@ -64,11 +64,11 @@ function BrandSideMascots() {
 
       <aside className="leopara-side-rail leopara-right-rail">
         <img
-          className="brand-side-mascot"
-          src="/brand/leopara-mascot-right.png"
+          className="brand-side-mascot brand-side-mascot-serious"
+          src="/brand/leopara-mark.png"
           alt=""
-          width="500"
-          height="665"
+          width="384"
+          height="512"
           aria-hidden="true"
           draggable={false}
         />

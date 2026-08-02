@@ -109,6 +109,12 @@ textarea {
   filter: drop-shadow(0 14px 24px rgba(190, 50, 110, 0.1));
 }
 
+.brand-side-mascot-serious {
+  width: min(100%, 164px);
+  height: 189px;
+  object-fit: contain;
+}
+
 .leopara-speech-bubble {
   position: absolute;
   z-index: 4;
