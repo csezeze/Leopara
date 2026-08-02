@@ -72,6 +72,7 @@ function BrandSideMascots() {
             height="512"
             draggable={false}
           />
+          <span className="brand-side-mascot-shirt-line" />
         </div>
         <div className="leopara-speech-bubble" role="note">
           <p>
